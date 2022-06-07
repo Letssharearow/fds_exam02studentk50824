@@ -1,0 +1,86 @@
+/*
+ * Copyright 2021 University of Applied Sciences Würzburg-Schweinfurt, Germany
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package de.fhws.fiw.fds.suttondemo.api.states.persons;
+
+import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
+import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetCollectionState;
+import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
+import de.fhws.fiw.fds.suttondemo.database.DaoFactory;
+import de.fhws.fiw.fds.suttondemo.models.Person;
+
+import javax.ws.rs.core.GenericEntity;
+import java.util.Collection;
+
+public class GetAllPersons extends AbstractGetCollectionState<Person>
+{
+	private final String firstName;
+
+	private final String lastName;
+
+	public GetAllPersons(final Builder builder)
+	{
+		super(builder);
+		this.firstName = builder.firstName;
+		this.lastName = builder.lastName;
+	}
+
+	protected void defineHttpResponseBody()
+	{
+		this.responseBuilder.entity(new GenericEntity<Collection<Person>>(this.result.getResult())
+		{
+		});
+	}
+
+	@Override protected void defineTransitionLinks()
+	{
+
+	}
+
+	@Override protected void authorizeRequest()
+	{
+
+	}
+
+	@Override protected CollectionModelResult<Person> loadModels()
+	{
+		return DaoFactory.getInstance().getPersonDao().readByFirstNameAndLastName(this.firstName, this.lastName);
+	}
+
+	public static class Builder extends AbstractGetCollectionStateBuilder<Person>
+	{
+		private String firstName;
+
+		private String lastName;
+
+		public Builder setFirstName(final String firstName)
+		{
+			this.firstName = firstName;
+			return this;
+		}
+
+		public Builder setLastName(final String lastName)
+		{
+			this.lastName = lastName;
+			return this;
+		}
+
+		@Override public AbstractState build()
+		{
+			return new GetAllPersons(this);
+		}
+	}
+}
