@@ -18,6 +18,7 @@ package de.fhws.fiw.fds.exam02;
 
 import de.fhws.fiw.fds.exam02.api.StudentTripService;
 import de.fhws.fiw.fds.sutton.server.api.AbstractApplication;
+import de.fhws.fiw.fds.suttondemo.api.services.PersonService;
 
 import javax.ws.rs.ApplicationPath;
 import java.util.HashSet;
@@ -27,10 +28,11 @@ import java.util.Set;
 {
 	@Override protected Set<Class<?>> getServiceClasses()
 	{
-		final Set<Class<?>> services = new HashSet<>();
+		final Set<Class<?>> returnValue = new HashSet<>();
 
-		services.add(StudentTripService.class);
+		returnValue.add(PersonService.class);
+		returnValue.add(StudentTripService.class);
 
-		return services;
+		return returnValue;
 	}
 }
