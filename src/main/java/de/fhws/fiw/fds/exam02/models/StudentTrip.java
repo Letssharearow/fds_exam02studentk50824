@@ -17,13 +17,13 @@ import java.util.Date;
 @XmlRootElement @XmlAccessorType(XmlAccessType.FIELD) public class StudentTrip extends AbstractModel
 	implements Serializable
 {
-	String name;
-	Collection<Student> students;
-	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) LocalDate start; //without time
-	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) LocalDate end;
-	String partnerUniversity;
-	String city;
-	String country;
+	private String name;
+	private Collection<Student> students;
+	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate start; //without time
+	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate end;
+	private String partnerUniversity;
+	private String city;
+	private String country;
 
 	public StudentTrip(String name, Collection<Student> students, LocalDate start, LocalDate end,
 		String partnerUniversity, String city, String country)
