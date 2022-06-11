@@ -33,19 +33,41 @@ import java.time.LocalDate;
 	private String name;
 	private String partnerUniversity;
 
-	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate birthDate;
+	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate start;
+	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate end;
 	private String emailAddress;
+
+	@JsonConverter(JsonDateTimeConverter.class) public LocalDate getStart()
+	{
+		return start;
+	}
+
+	@JsonConverter(JsonDateTimeConverter.class) public void setStart(LocalDate start)
+	{
+		this.start = start;
+	}
+
+	@JsonConverter(JsonDateTimeConverter.class) public LocalDate getEnd()
+	{
+		return end;
+	}
+
+	@JsonConverter(JsonDateTimeConverter.class) public void setEnd(LocalDate end)
+	{
+		this.end = end;
+	}
+
+	public Person(String name, String partnerUniversity, LocalDate start, LocalDate end, String emailAddress)
+	{
+		this.name = name;
+		this.partnerUniversity = partnerUniversity;
+		this.start = start;
+		this.end = end;
+		this.emailAddress = emailAddress;
+	}
 
 	public Person()
 	{
-	}
-
-	public Person(final String firstname, final String lastname, final String emailAddress, final LocalDate birthdate)
-	{
-		this.name = firstname;
-		this.partnerUniversity = lastname;
-		this.birthDate = birthdate;
-		this.emailAddress = emailAddress;
 	}
 
 	public String getName()
@@ -68,16 +90,6 @@ import java.time.LocalDate;
 		this.partnerUniversity = partnerUniversity;
 	}
 
-	@JsonConverter(JsonDateTimeConverter.class) public LocalDate getBirthDate()
-	{
-		return birthDate;
-	}
-
-	@JsonConverter(JsonDateTimeConverter.class) public void setBirthDate(final LocalDate birthDate)
-	{
-		this.birthDate = birthDate;
-	}
-
 	public String getEmailAddress()
 	{
 		return emailAddress;
@@ -87,5 +99,5 @@ import java.time.LocalDate;
 	{
 		this.emailAddress = emailAddress;
 	}
-	
+
 }
