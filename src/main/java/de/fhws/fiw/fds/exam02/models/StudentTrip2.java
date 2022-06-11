@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@XmlRootElement @XmlAccessorType(XmlAccessType.FIELD) public class Person extends AbstractModel implements Serializable
+@XmlRootElement @XmlAccessorType(XmlAccessType.FIELD) public class StudentTrip2 extends AbstractModel
+	implements Serializable
 {
 	private String name;
 	private String partnerUniversity;
@@ -57,7 +58,7 @@ import java.time.LocalDate;
 		this.end = end;
 	}
 
-	public Person(String name, String partnerUniversity, LocalDate start, LocalDate end, String emailAddress)
+	public StudentTrip2(String name, String partnerUniversity, LocalDate start, LocalDate end, String emailAddress)
 	{
 		this.name = name;
 		this.partnerUniversity = partnerUniversity;
@@ -66,7 +67,7 @@ import java.time.LocalDate;
 		this.emailAddress = emailAddress;
 	}
 
-	public Person()
+	public StudentTrip2()
 	{
 	}
 
