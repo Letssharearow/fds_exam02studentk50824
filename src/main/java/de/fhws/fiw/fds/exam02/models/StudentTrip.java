@@ -3,18 +3,24 @@ package de.fhws.fiw.fds.exam02.models;
 import com.owlike.genson.annotation.JsonConverter;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import de.fhws.fiw.fds.sutton.utils.JsonDateTimeConverter;
+import de.fhws.fiw.fds.sutton.utils.XmlDateTimeConverter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 
-public class StudentTrip extends AbstractModel implements Serializable
+@XmlRootElement @XmlAccessorType(XmlAccessType.FIELD) public class StudentTrip extends AbstractModel
+	implements Serializable
 {
 	String name;
 	Collection<Student> students;
-	LocalDate start; //without time
-	LocalDate end;
+	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) LocalDate start; //without time
+	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) LocalDate end;
 	String partnerUniversity;
 	String city;
 	String country;
