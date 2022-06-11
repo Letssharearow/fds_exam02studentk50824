@@ -17,6 +17,7 @@
 package de.fhws.fiw.fds.exam02.api;
 
 import de.fhws.fiw.fds.exam02.api.states.StudentTrips.*;
+import de.fhws.fiw.fds.exam02.models.Person;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 
@@ -44,9 +45,10 @@ import javax.ws.rs.core.Response;
 	}
 
 	@POST @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response createSingleStudentTrip(
-		final StudentTrip StudentTripModel)
+		final Person StudentTripModel)
 	{
-		return new PostNewStudentTrip.Builder().setModelToCreate(StudentTripModel).setUriInfo(this.uriInfo)
+		StudentTrip studentTrip2 = null;
+		return new PostNewStudentTrip.Builder().setModelToCreate(studentTrip2).setUriInfo(this.uriInfo)
 			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
 			.execute();
 	}

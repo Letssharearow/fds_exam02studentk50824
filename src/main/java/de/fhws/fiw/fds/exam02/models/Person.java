@@ -30,8 +30,8 @@ import java.time.LocalDate;
 
 @XmlRootElement @XmlAccessorType(XmlAccessType.FIELD) public class Person extends AbstractModel implements Serializable
 {
-	private String firstName;
-	private String lastName;
+	private String name;
+	private String partnerUniversity;
 
 	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate birthDate;
 	private String emailAddress;
@@ -42,30 +42,30 @@ import java.time.LocalDate;
 
 	public Person(final String firstname, final String lastname, final String emailAddress, final LocalDate birthdate)
 	{
-		this.firstName = firstname;
-		this.lastName = lastname;
+		this.name = firstname;
+		this.partnerUniversity = lastname;
 		this.birthDate = birthdate;
 		this.emailAddress = emailAddress;
 	}
 
-	public String getFirstName()
+	public String getName()
 	{
-		return firstName;
+		return name;
 	}
 
-	public void setFirstName(final String firstName)
+	public void setName(final String name)
 	{
-		this.firstName = firstName;
+		this.name = name;
 	}
 
-	public String getLastName()
+	public String getPartnerUniversity()
 	{
-		return lastName;
+		return partnerUniversity;
 	}
 
-	public void setLastName(final String lastName)
+	public void setPartnerUniversity(final String partnerUniversity)
 	{
-		this.lastName = lastName;
+		this.partnerUniversity = partnerUniversity;
 	}
 
 	@JsonConverter(JsonDateTimeConverter.class) public LocalDate getBirthDate()
@@ -90,7 +90,7 @@ import java.time.LocalDate;
 
 	@Override public String toString()
 	{
-		return "Person{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
+		return "Person{" + "id=" + id + ", name='" + name + '\'' + ", partnerUniversity='" + partnerUniversity + '\''
 			+ ", birthDate=" + birthDate + ", emailAddress='" + emailAddress + '\'' + '}';
 	}
 }
