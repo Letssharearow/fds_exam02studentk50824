@@ -45,10 +45,9 @@ import javax.ws.rs.core.Response;
 	}
 
 	@POST @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response createSingleStudentTrip(
-		final StudentTrip2 StudentTripModel)
+		final StudentTrip StudentTripModel)
 	{
-		StudentTrip studentTrip2 = null;
-		return new PostNewStudentTrip.Builder().setModelToCreate(studentTrip2).setUriInfo(this.uriInfo)
+		return new PostNewStudentTrip.Builder().setModelToCreate(StudentTripModel).setUriInfo(this.uriInfo)
 			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
 			.execute();
 	}

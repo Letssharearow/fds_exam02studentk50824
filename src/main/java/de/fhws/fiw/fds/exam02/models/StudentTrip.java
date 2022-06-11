@@ -37,6 +37,10 @@ import java.util.Date;
 		this.country = country;
 	}
 
+	public StudentTrip()
+	{
+	}
+
 	public String getName()
 	{
 		return name;
