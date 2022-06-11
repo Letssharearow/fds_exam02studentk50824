@@ -87,10 +87,5 @@ import java.time.LocalDate;
 	{
 		this.emailAddress = emailAddress;
 	}
-
-	@Override public String toString()
-	{
-		return "Person{" + "id=" + id + ", name='" + name + '\'' + ", partnerUniversity='" + partnerUniversity + '\''
-			+ ", birthDate=" + birthDate + ", emailAddress='" + emailAddress + '\'' + '}';
-	}
+	
 }
