@@ -71,7 +71,7 @@ public abstract class AbstractGetCollectionState<T extends AbstractModel> extend
 
 		defineHttpResponseBody();
 
-		//defineSelfLink();
+		defineSelfLink();
 
 		definePagingLinks();
 
@@ -118,7 +118,7 @@ public abstract class AbstractGetCollectionState<T extends AbstractModel> extend
 
 	protected void defineSelfLink()
 	{
-		this.query.addSelfLink(createPagingContext());
+		//this.query.addSelfLink(createPagingContext());
 	}
 
 	private PagingContext createPagingContext()

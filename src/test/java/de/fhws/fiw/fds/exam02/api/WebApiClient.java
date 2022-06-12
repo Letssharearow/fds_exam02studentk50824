@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class WebApiClient
 {
-	private static final String URL = "http://localhost:8080/demo/examples/studentTrips";
+	private static final String URL = "http://localhost:8080/exam02/api/StudentTrips";
 
 	private final OkHttpClient client;
 

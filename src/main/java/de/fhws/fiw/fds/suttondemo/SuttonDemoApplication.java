@@ -16,7 +16,7 @@
 
 package de.fhws.fiw.fds.suttondemo;
 
-import de.fhws.fiw.fds.exam02.api.StudentTripService;
+import de.fhws.fiw.fds.exam02.api.services.StudentTripService;
 import de.fhws.fiw.fds.sutton.server.api.AbstractApplication;
 import de.fhws.fiw.fds.suttondemo.api.services.PersonService;
 

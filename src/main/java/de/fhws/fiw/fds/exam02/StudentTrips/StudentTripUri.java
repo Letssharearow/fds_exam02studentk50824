@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.exam02.api.states.StudentTrips;
+package de.fhws.fiw.fds.exam02.StudentTrips;
 
 import de.fhws.fiw.fds.suttondemo.Start;
 
@@ -24,4 +24,5 @@ public interface StudentTripUri
 	String PATH_ELEMENT = "StudentTrips";
 	String REL_PATH = Start.CONTEXT_PATH + "/api/" + PATH_ELEMENT;
 	String REL_PATH_ID = REL_PATH + "/{id}";
+	String SEARCH = REL_PATH + "?search={SEARCH}";
 }

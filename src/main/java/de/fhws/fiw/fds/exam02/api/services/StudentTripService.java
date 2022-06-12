@@ -14,10 +14,14 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.exam02.api;
+package de.fhws.fiw.fds.exam02.api.services;
 
-import de.fhws.fiw.fds.exam02.api.states.StudentTrips.*;
-import de.fhws.fiw.fds.exam02.models.StudentTrip2;
+import de.fhws.fiw.fds.exam02.api.states.DispatcherState;
+import de.fhws.fiw.fds.exam02.api.states.delete.DeleteSingleStudentTrip;
+import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudentTrips;
+import de.fhws.fiw.fds.exam02.api.states.get.GetSingleStudentTrip;
+import de.fhws.fiw.fds.exam02.api.states.post.PostNewStudentTrip;
+import de.fhws.fiw.fds.exam02.api.states.put.PutSingleStudentTrip;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 
@@ -27,13 +31,9 @@ import javax.ws.rs.core.Response;
 
 @Path("StudentTrips") public class StudentTripService extends AbstractService
 {
-	@GET @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response getAllStudentTrips(
-		@DefaultValue("") @QueryParam("firstname") final String firstName,
-		@DefaultValue("") @QueryParam("lastname") final String lastName)
+	@GET @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response getAllStudentTrips()
 	{
-		return new GetAllStudentTrips.Builder().setFirstName(firstName)
-
-			.setLastName(lastName).setQuery(null).setUriInfo(this.uriInfo).setRequest(this.request)
+		return new GetAllStudentTrips.Builder().setQuery(null).setUriInfo(this.uriInfo).setRequest(this.request)
 			.setHttpServletRequest(this.httpServletRequest).setContext(this.context).build().execute();
 	}
 
