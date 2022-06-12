@@ -4,13 +4,14 @@ import de.fhws.fiw.fds.exam02.models.StudentTripView;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 public class WebApiResponse
 {
-	private final Collection<StudentTripView> responseData;
 	private final int lastStatusCode;
 	private okhttp3.Response response;
+	private Map<String, Map<String, String>> links;
 
 	public WebApiResponse(final int lastStatusCode)
 	{
@@ -49,9 +50,14 @@ public class WebApiResponse
 		return lastStatusCode;
 	}
 
-	public String getLocation()
+	public Map<String, Map<String, String>> getLinks()
 	{
-		return this.response.header("Location");
+		return links;
+	}
+
+	public String getLink(String operation, String link)
+	{
+		return links.get(operation).get(link);
 	}
 
 	private static Collection<StudentTripView> convertToList(final Optional<StudentTripView> studentTripView)
