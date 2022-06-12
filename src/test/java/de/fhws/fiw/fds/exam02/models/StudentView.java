@@ -81,5 +81,9 @@ public class StudentView implements Serializable
 		this.immatriculationNumber = immatriculationNumber;
 		this.email = email;
 	}
+
+	public StudentView()
+	{
+	}
 }
 

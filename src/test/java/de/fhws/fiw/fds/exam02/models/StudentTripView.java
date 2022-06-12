@@ -31,6 +31,10 @@ public class StudentTripView
 		this.country = country;
 	}
 
+	public StudentTripView()
+	{
+	}
+
 	public String getName()
 	{
 		return name;

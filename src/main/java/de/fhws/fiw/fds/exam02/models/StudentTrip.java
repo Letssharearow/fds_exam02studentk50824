@@ -1,10 +1,13 @@
 package de.fhws.fiw.fds.exam02.models;
 
 import com.owlike.genson.annotation.JsonConverter;
+import de.fhws.fiw.fds.sutton.client.Link;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import de.fhws.fiw.fds.sutton.utils.JsonDateTimeConverter;
 import de.fhws.fiw.fds.sutton.utils.XmlDateTimeConverter;
+import org.glassfish.jersey.linking.InjectLink;
 
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,6 +20,7 @@ import java.util.Date;
 @XmlRootElement @XmlAccessorType(XmlAccessType.FIELD) public class StudentTrip extends AbstractModel
 	implements Serializable
 {
+	@InjectLink(style = InjectLink.Style.ABSOLUTE, value = "/studentTrips/${instance.id}", rel = "self", type = "application/json") private Link selfLink;
 	private String name;
 	private Collection<Student> students;
 	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate start; //without time

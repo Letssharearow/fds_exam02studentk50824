@@ -83,4 +83,8 @@ public class Student extends AbstractModel implements Serializable
 		this.immatriculationNumber = immatriculationNumber;
 		this.email = email;
 	}
+
+	public Student()
+	{
+	}
 }
