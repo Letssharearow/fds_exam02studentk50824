@@ -14,37 +14,47 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.exam02.api.states.StudentTrips;
+package de.fhws.fiw.fds.exam02.api.states.get;
 
+import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
-import de.fhws.fiw.fds.sutton.server.api.states.put.AbstractPutState;
-import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
+import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetState;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 
-public class PutSingleStudentTrip extends AbstractPutState<StudentTrip>
+import javax.ws.rs.core.MediaType;
+
+public class GetSingleStudentTrip extends AbstractGetState<StudentTrip>
 {
-	public PutSingleStudentTrip(final Builder builder)
+	public GetSingleStudentTrip(final AbstractGetStateBuilder builder)
 	{
 		super(builder);
 	}
 
+	@Override protected void authorizeRequest()
+	{
+
+	}
+
 	@Override protected SingleModelResult<StudentTrip> loadModel()
 	{
-		return DaoFactory.getInstance().getStudentTripDao().readById(this.modelToUpdate.getId());
+		return DaoFactory.getInstance().getStudentTripDao().readById(this.requestedId);
 	}
 
-	@Override protected NoContentResult updateModel()
+	@Override protected void defineTransitionLinks()
 	{
-		return DaoFactory.getInstance().getStudentTripDao().update(this.modelToUpdate);
+		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.UPDATE_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.DELETE_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.REL_PATH, StudentTripRelTypes.GET_ALL_STUDENTTRIPS, MediaType.APPLICATION_JSON);
 	}
 
-	public static class Builder extends AbstractPutStateBuilder<StudentTrip>
+	public static class Builder extends AbstractGetStateBuilder
 	{
 		@Override public AbstractState build()
 		{
-			return new PutSingleStudentTrip(this);
+			return new GetSingleStudentTrip(this);
 		}
 	}
 }

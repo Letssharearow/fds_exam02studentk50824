@@ -14,13 +14,17 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.exam02.api.states.StudentTrips;
+package de.fhws.fiw.fds.exam02.api.states.post;
 
+import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.post.AbstractPostState;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
+
+import javax.ws.rs.core.MediaType;
 
 public class PostNewStudentTrip extends AbstractPostState<StudentTrip>
 {
@@ -41,7 +45,7 @@ public class PostNewStudentTrip extends AbstractPostState<StudentTrip>
 
 	@Override protected void defineTransitionLinks()
 	{
-
+		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.GET_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
 	}
 
 	public static class Builder extends AbstractPostStateBuilder<StudentTrip>

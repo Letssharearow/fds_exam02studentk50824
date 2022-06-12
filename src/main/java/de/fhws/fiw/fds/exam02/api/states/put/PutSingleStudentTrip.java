@@ -14,41 +14,37 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.exam02.api.states.StudentTrips;
+package de.fhws.fiw.fds.exam02.api.states.put;
 
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
-import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetState;
+import de.fhws.fiw.fds.sutton.server.api.states.put.AbstractPutState;
+import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 
-public class GetSingleStudentTrip extends AbstractGetState<StudentTrip>
+public class PutSingleStudentTrip extends AbstractPutState<StudentTrip>
 {
-	public GetSingleStudentTrip(final AbstractGetStateBuilder builder)
+	public PutSingleStudentTrip(final Builder builder)
 	{
 		super(builder);
 	}
 
-	@Override protected void authorizeRequest()
-	{
-
-	}
-
 	@Override protected SingleModelResult<StudentTrip> loadModel()
 	{
-		return DaoFactory.getInstance().getStudentTripDao().readById(this.requestedId);
+		return DaoFactory.getInstance().getStudentTripDao().readById(this.modelToUpdate.getId());
 	}
 
-	@Override protected void defineTransitionLinks()
+	@Override protected NoContentResult updateModel()
 	{
-
+		return DaoFactory.getInstance().getStudentTripDao().update(this.modelToUpdate);
 	}
 
-	public static class Builder extends AbstractGetStateBuilder
+	public static class Builder extends AbstractPutStateBuilder<StudentTrip>
 	{
 		@Override public AbstractState build()
 		{
-			return new GetSingleStudentTrip(this);
+			return new PutSingleStudentTrip(this);
 		}
 	}
 }

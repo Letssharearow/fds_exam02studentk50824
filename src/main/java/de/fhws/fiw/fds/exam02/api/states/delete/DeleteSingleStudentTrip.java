@@ -14,14 +14,18 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.exam02.api.states.StudentTrips;
+package de.fhws.fiw.fds.exam02.api.states.delete;
 
+import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.delete.AbstractDeleteState;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
+
+import javax.ws.rs.core.MediaType;
 
 public class DeleteSingleStudentTrip extends AbstractDeleteState<StudentTrip>
 {
@@ -47,7 +51,7 @@ public class DeleteSingleStudentTrip extends AbstractDeleteState<StudentTrip>
 
 	@Override protected void defineTransitionLinks()
 	{
-
+		addLink(StudentTripUri.REL_PATH, StudentTripRelTypes.GET_ALL_STUDENTTRIPS, MediaType.APPLICATION_JSON);
 	}
 
 	public static class Builder extends AbstractDeleteStateBuilder

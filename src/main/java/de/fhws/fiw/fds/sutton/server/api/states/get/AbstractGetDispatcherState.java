@@ -26,52 +26,52 @@ import java.net.URI;
 
 public abstract class AbstractGetDispatcherState extends AbstractState
 {
-	protected AbstractGetDispatcherState( final AbstractDispatcherStateBuilder builder )
+	protected AbstractGetDispatcherState(final AbstractDispatcherStateBuilder builder)
 	{
-		super( builder );
+		super(builder);
 	}
 
-	@Override
-	protected Response buildInternal( )
+	@Override protected Response buildInternal()
 	{
-		configureState( );
+		configureState();
 
-		return createResponse( );
+		return createResponse();
 	}
 
-	protected Response createResponse( )
+	protected Response createResponse()
 	{
-		defineHttpResponseBody( );
+		defineHttpResponseBody();
 
-		defineSelfLink( );
+		defineSelfLink();
 
-		defineTransitionLinks( );
+		defineTransitionLinks();
 
-		this.responseBuilder.cacheControl( CachingUtils.create60SecondsPublicCaching( ) );
+		this.responseBuilder.cacheControl(CachingUtils.create60SecondsPublicCaching());
 
-		return this.responseBuilder.build( );
+		return this.responseBuilder.build();
 	}
 
-	private void defineHttpResponseBody( )
+	private void defineHttpResponseBody()
 	{
-		this.responseBuilder.entity( "" );
+		this.responseBuilder.entity("");
 	}
 
 	/**
 	 * This method is used to define all transition links based on the idea of a REST system as
 	 * a finite state machine.
 	 */
-	protected abstract void defineTransitionLinks( );
+	protected abstract void defineTransitionLinks();
 
-	protected void defineSelfLink( )
+	protected void defineSelfLink()
 	{
-		final UriBuilder builder = this.uriInfo.getAbsolutePathBuilder( );
-		final URI self = builder.build( );
+		final UriBuilder builder = this.uriInfo.getAbsolutePathBuilder();
+		final URI self = builder.build();
 
-		Hyperlinks.addLink( this.responseBuilder, self, "self", getAcceptRequestHeader( ) );
+		Hyperlinks.addLink(this.responseBuilder, self, "self", getAcceptRequestHeader());
 	}
 
 	public abstract static class AbstractDispatcherStateBuilder extends AbstractStateBuilder
 	{
+
 	}
 }

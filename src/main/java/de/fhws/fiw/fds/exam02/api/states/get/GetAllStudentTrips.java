@@ -14,8 +14,10 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.exam02.api.states.StudentTrips;
+package de.fhws.fiw.fds.exam02.api.states.get;
 
+import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
@@ -23,19 +25,15 @@ import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetCollectionState;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 public class GetAllStudentTrips extends AbstractGetCollectionState<StudentTrip>
 {
-	private final String firstName;
-
-	private final String lastName;
 
 	public GetAllStudentTrips(final Builder builder)
 	{
 		super(builder);
-		this.firstName = builder.firstName;
-		this.lastName = builder.lastName;
 	}
 
 	protected void defineHttpResponseBody()
@@ -47,7 +45,8 @@ public class GetAllStudentTrips extends AbstractGetCollectionState<StudentTrip>
 
 	@Override protected void defineTransitionLinks()
 	{
-
+		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.GET_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.SEARCH, StudentTripRelTypes.SEARCH_ALL_STUDENTTRIPS, MediaType.APPLICATION_JSON);
 	}
 
 	@Override protected void authorizeRequest()
@@ -57,27 +56,11 @@ public class GetAllStudentTrips extends AbstractGetCollectionState<StudentTrip>
 
 	@Override protected CollectionModelResult<StudentTrip> loadModels()
 	{
-		return DaoFactory.getInstance().getStudentTripDao().readByNameAndLastName(this.firstName, this.lastName); //TODO
+		return DaoFactory.getInstance().getStudentTripDao().readByNameAndLastName("", ""); //TODO
 	}
 
 	public static class Builder extends AbstractGetCollectionStateBuilder<StudentTrip>
 	{
-		private String firstName;
-
-		private String lastName;
-
-		public Builder setFirstName(final String firstName)
-		{
-			this.firstName = firstName;
-			return this;
-		}
-
-		public Builder setLastName(final String lastName)
-		{
-			this.lastName = lastName;
-			return this;
-		}
-
 		@Override public AbstractState build()
 		{
 			return new GetAllStudentTrips(this);
