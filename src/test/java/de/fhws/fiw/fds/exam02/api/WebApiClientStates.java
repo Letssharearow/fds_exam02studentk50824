@@ -13,17 +13,14 @@ import java.util.stream.Collectors;
 
 public class WebApiClientStates
 {
-	private String url = "http://localhost:8080/demo/examples/studentTrips";
-
 	private OkHttpClient client;
 
 	private Genson genson;
 
-	public WebApiClientStates(String url, OkHttpClient client, Genson genson)
+	public WebApiClientStates(OkHttpClient client, Genson genson)
 	{
 		this.client = client;
 		this.genson = genson;
-		this.url = url;
 	}
 
 	public WebApiResponse loadStudentTripByURL(String url, long studentTripId) throws IOException

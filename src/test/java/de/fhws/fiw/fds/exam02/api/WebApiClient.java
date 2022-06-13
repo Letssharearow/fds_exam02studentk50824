@@ -32,7 +32,7 @@ public class WebApiClient
 	{
 		this.client = new OkHttpClient();
 		this.genson = new Genson();
-		this.states = new WebApiClientStates(URL, this.client, this.genson);
+		this.states = new WebApiClientStates(this.client, this.genson);
 	}
 
 	public static RequestBody getStudentTripRequestBody(Genson genson, StudentTripView studentTripView)
