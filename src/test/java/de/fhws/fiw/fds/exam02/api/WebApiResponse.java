@@ -10,34 +10,51 @@ import java.util.Optional;
 public class WebApiResponse
 {
 	private final int lastStatusCode;
-	private okhttp3.Response response;
-	private Map<String, Map<String, String>> links;
+	private final Collection<StudentTripView> responseData;
+	private final Map<String, Map<String, String>> links;
+	private final long id;
 
-	public WebApiResponse(final int lastStatusCode)
+	public WebApiResponse(final int lastStatusCode, Map<String, Map<String, String>> links)
 	{
-		this(Collections.EMPTY_LIST, lastStatusCode);
+		this(Collections.EMPTY_LIST, lastStatusCode, links, -1);
 	}
 
-	public WebApiResponse(final StudentTripView responseData, final int lastStatusCode)
+	public WebApiResponse(final StudentTripView responseData, final int lastStatusCode,
+		Map<String, Map<String, String>> links)
 	{
-		this(Optional.of(responseData), lastStatusCode);
+		this(Optional.of(responseData), lastStatusCode, links);
 	}
 
-	public WebApiResponse(final Optional<StudentTripView> responseData, final int lastStatusCode)
+	public WebApiResponse(final int lastStatusCode, Map<String, Map<String, String>> links, long id)
 	{
-		this(convertToList(responseData), lastStatusCode);
+		this(Collections.EMPTY_LIST, lastStatusCode, links, id);
 	}
 
-	public WebApiResponse(final Collection<StudentTripView> responseData, final int lastStatusCode)
+	public WebApiResponse(final StudentTripView responseData, final int lastStatusCode,
+		Map<String, Map<String, String>> links, long id)
+	{
+		this(Optional.of(responseData), lastStatusCode, links);
+	}
+
+	public WebApiResponse(final Optional<StudentTripView> responseData, final int lastStatusCode,
+		Map<String, Map<String, String>> links)
+	{
+		this(convertToList(responseData), lastStatusCode, links, -1);
+	}
+
+	public WebApiResponse(final Collection<StudentTripView> responseData, final int lastStatusCode,
+		Map<String, Map<String, String>> links)
+	{
+		this(responseData, lastStatusCode, links, -1);
+	}
+
+	public WebApiResponse(final Collection<StudentTripView> responseData, final int lastStatusCode,
+		Map<String, Map<String, String>> links, long id)
 	{
 		this.responseData = responseData;
 		this.lastStatusCode = lastStatusCode;
-	}
-
-	public WebApiResponse(okhttp3.Response response, int lastStatusCode)
-	{
-		this(Collections.EMPTY_LIST, lastStatusCode);
-		this.response = response;
+		this.links = links;
+		this.id = id;
 	}
 
 	public Collection<StudentTripView> getResponseData()
@@ -55,9 +72,14 @@ public class WebApiResponse
 		return links;
 	}
 
-	public String getLink(String operation, String link)
+	public String getLink(String operation)
 	{
-		return links.get(operation).get(link);
+		return links.get(operation).get("link");
+	}
+
+	public long getId()
+	{
+		return this.id;
 	}
 
 	private static Collection<StudentTripView> convertToList(final Optional<StudentTripView> studentTripView)
