@@ -47,6 +47,23 @@ import javax.ws.rs.core.Response;
 			.setHttpServletRequest(this.httpServletRequest).setContext(this.context).build().execute();
 	}
 
+	@GET @Path("{id: \\d+}/Students") @Produces({ MediaType.APPLICATION_JSON,
+		MediaType.APPLICATION_XML }) public Response getStudentsFromStudentTrip(@PathParam("id") final long id)
+	{
+		return new GetSingleStudentTrip.Builder().setRequestedId(id).setUriInfo(this.uriInfo).setRequest(this.request)
+			.setHttpServletRequest(this.httpServletRequest).setContext(this.context).build().execute();
+		//TODO
+	}
+
+	@GET @Path("{StudentTripId: \\d+}/Students/{StudentId: \\d+}") @Produces({ MediaType.APPLICATION_JSON,
+		MediaType.APPLICATION_XML }) public Response getSingleStudentFromStudentTrip(
+		@PathParam("StudentTripId") final long studentTripId, @PathParam("StudentId") final long studentId)
+	{
+		return new GetSingleStudentTrip.Builder().setRequestedId(studentTripId).setUriInfo(this.uriInfo)
+			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
+			.execute();//TODO
+	}
+
 	@POST @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response createSingleStudentTrip(
 		final StudentTrip StudentTripModel)
 	{

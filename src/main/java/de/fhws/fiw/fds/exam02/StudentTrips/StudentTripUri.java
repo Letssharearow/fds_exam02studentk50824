@@ -24,6 +24,9 @@ public interface StudentTripUri
 	String PATH_ELEMENT = "StudentTrips";
 	String REL_PATH = Start.CONTEXT_PATH + "/api/" + PATH_ELEMENT;
 	String REL_PATH_ID = REL_PATH + "/{id}";
-	String SEARCH = REL_PATH + "?search={SERACH}";
+	String SEARCH_NAME = REL_PATH + "?name=Name"; //TODO:
+	String SEARCH_CITY = REL_PATH + "?city=City";
+	String SEARCH_COUNTRY = REL_PATH + "?city=City";
+	String SEARCH_DATE = REL_PATH + "?start=1900-01-22&stop=2022-12-05";
 
 }

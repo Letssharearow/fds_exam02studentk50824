@@ -40,21 +40,26 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 		populateData();
 	}
 
-	@Override public CollectionModelResult<StudentTrip> readBySearchParam(String serachWords)
+	public CollectionModelResult<StudentTrip> readBySearchParam(String serachWords)
 	{
 		return readByPredicate(bySearch(serachWords.split(regex)));
 	}
 
 	public CollectionModelResult<StudentTrip> order(CollectionModelResult<StudentTrip> result)
 	{
-		
-		return result;
+		return result; //TODO
 	}
 
 	private void populateData()
 	{
 		LocalDate date = LocalDate.of(1960, 2, 9);
 		create(new StudentTrip("Felix", null, date, date, "partnerUni", "city", "country"));
+	}
+
+	@Override public CollectionModelResult<StudentTrip> readByNameCityCountryDate(String name, String city,
+		String country, String start, String stop)
+	{
+		return null;
 	}
 
 	private Predicate<StudentTrip> bySearch(final String[] searchWords)
@@ -103,4 +108,5 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 		return optionalLocalDate;
 		//TODO: check for more dateFormats
 	}
+
 }
