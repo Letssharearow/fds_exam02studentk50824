@@ -54,11 +54,6 @@ public class GetAllStudentTrips extends AbstractGetCollectionState<StudentTrip>
 
 	}
 
-	@Override protected CollectionModelResult<StudentTrip> loadModels()
-	{
-		return DaoFactory.getInstance().getStudentTripDao().readByNameAndLastName("", ""); //TODO
-	}
-
 	public static class Builder extends AbstractGetCollectionStateBuilder<StudentTrip>
 	{
 		@Override public AbstractState build()
