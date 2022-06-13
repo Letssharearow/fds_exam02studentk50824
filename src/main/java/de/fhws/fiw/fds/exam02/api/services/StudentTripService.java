@@ -16,7 +16,7 @@
 
 package de.fhws.fiw.fds.exam02.api.services;
 
-import de.fhws.fiw.fds.exam02.api.states.DispatcherState;
+import de.fhws.fiw.fds.exam02.api.states.QueryPageParameter;
 import de.fhws.fiw.fds.exam02.api.states.delete.DeleteSingleStudentTrip;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudentTrips;
 import de.fhws.fiw.fds.exam02.api.states.get.GetSingleStudentTrip;
@@ -31,10 +31,12 @@ import javax.ws.rs.core.Response;
 
 @Path("StudentTrips") public class StudentTripService extends AbstractService
 {
-	@GET @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response getAllStudentTrips()
+	@GET @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response getAllStudentTrips(
+		@DefaultValue("1") @QueryParam("page") int pageNumber)
 	{
-		return new GetAllStudentTrips.Builder().setQuery(null).setUriInfo(this.uriInfo).setRequest(this.request)
-			.setHttpServletRequest(this.httpServletRequest).setContext(this.context).build().execute();
+		return new GetAllStudentTrips.Builder().setQuery(new QueryPageParameter(pageNumber)).setUriInfo(this.uriInfo)
+			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
+			.execute();
 	}
 
 	@GET @Path("{id: \\d+}") @Produces({ MediaType.APPLICATION_JSON,
