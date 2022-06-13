@@ -112,13 +112,13 @@ public abstract class AbstractGetCollectionState<T extends AbstractModel> extend
 	{
 		final PagingContext pagingContext = createPagingContext();
 
-		//this.query.addPrevPageLink(pagingContext);
-		//this.query.addNextPageLink(pagingContext);
+		this.query.addPrevPageLink(pagingContext);
+		this.query.addNextPageLink(pagingContext);
 	}
 
 	protected void defineSelfLink()
 	{
-		//this.query.addSelfLink(createPagingContext());
+		this.query.addSelfLink(createPagingContext());
 	}
 
 	private PagingContext createPagingContext()
