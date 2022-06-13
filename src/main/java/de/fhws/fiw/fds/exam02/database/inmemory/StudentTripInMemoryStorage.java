@@ -23,20 +23,32 @@ import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 import org.apache.commons.lang.StringUtils;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentTrip> implements StudentTripDao
 {
+	private final String regex = "OR";
+
 	public StudentTripInMemoryStorage()
 	{
 		super();
 		populateData();
 	}
 
-	@Override public CollectionModelResult<StudentTrip> readByNameAndLastName(final String Name, final String lastName)
+	@Override public CollectionModelResult<StudentTrip> readBySearchParam(String serachWords)
 	{
-		return readByPredicate(byNameAndLastName(Name, lastName));
+		return readByPredicate(bySearch(serachWords.split(regex)));
+	}
+
+	public CollectionModelResult<StudentTrip> order(CollectionModelResult<StudentTrip> result)
+	{
+		
+		return result;
 	}
 
 	private void populateData()
@@ -45,18 +57,50 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 		create(new StudentTrip("Felix", null, date, date, "partnerUni", "city", "country"));
 	}
 
-	private Predicate<StudentTrip> byNameAndLastName(final String Name, final String lastName)
+	private Predicate<StudentTrip> bySearch(final String[] searchWords)
 	{
-		return p -> matchName(p, Name) && matchLastName(p, lastName);
+		return p -> matchAllWords(p, searchWords);
 	}
 
-	private boolean matchName(final StudentTrip StudentTrip, final String Name)
+	//Filtering Name, Timeperiod, City, Country
+	private boolean matchAllWords(final StudentTrip studentTrip, final String[] words)
 	{
-		return StringUtils.isEmpty(Name) || StudentTrip.getName().equals(Name);
+		for (String word : words)
+		{
+			word = word.toLowerCase(Locale.ROOT);
+			if (matchString(studentTrip.getName().toLowerCase(Locale.ROOT), word) || matchString(
+				studentTrip.getCity().toLowerCase(Locale.ROOT), word) || matchString(
+				studentTrip.getCountry().toLowerCase(Locale.ROOT), word) || matchTimeperiod(studentTrip, word))
+				return true;
+		}
+		return false;
 	}
 
-	private boolean matchLastName(final StudentTrip StudentTrip, final String lastName)
+	private boolean matchString(String variable, String value)
 	{
-		return StringUtils.isEmpty(lastName) || StudentTrip.getName().equals(lastName);
+		return StringUtils.isEmpty(value) || variable.startsWith(value) || variable.contains(value)
+			|| variable.equalsIgnoreCase(value);
+	}
+
+	private boolean matchTimeperiod(final StudentTrip studentTrip, final String date)
+	{
+		Optional<LocalDate> optionalLocalDate = toDate(date);
+		return optionalLocalDate.isPresent() && studentTrip.getStart().isAfter(optionalLocalDate.get())
+			&& studentTrip.getEnd().isAfter(optionalLocalDate.get());
+	}
+
+	private Optional<LocalDate> toDate(String date)
+	{
+		Optional<LocalDate> optionalLocalDate = Optional.empty();
+		try
+		{
+			optionalLocalDate = Optional.of(LocalDate.parse(date));
+		}
+		catch (DateTimeParseException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return optionalLocalDate;
+		//TODO: check for more dateFormats
 	}
 }

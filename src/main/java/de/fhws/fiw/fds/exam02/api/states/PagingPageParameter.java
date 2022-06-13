@@ -32,7 +32,7 @@ public class PagingPageParameter extends PagingBehavior<StudentTrip>
 	@Override protected boolean hasNextLink(CollectionModelResult<?> result)
 	{
 		final int maxValuesAmount = pageNumber * DEFAULT_PAGE_SIZE;
-		return result.getResult().size() > maxValuesAmount;
+		return result.getTotalNumberOfResult() > maxValuesAmount;
 	}
 
 	@Override protected boolean hasPrevLink()
@@ -42,18 +42,17 @@ public class PagingPageParameter extends PagingBehavior<StudentTrip>
 
 	@Override protected URI getSelfUri(UriInfo uriInfo)
 	{
-		//		URI param = uriInfo.getAbsolutePathBuilder()
-		//			.queryParam("page", UriComponent.encode(pageNumber + "", UriComponent.Type.QUERY_PARAM)).build();
-		return uriInfo.getAbsolutePathBuilder().queryParam("page", pageNumber).build();
+		URI page = uriInfo.getRequestUriBuilder().queryParam("page", pageNumber).build();
+		return uriInfo.getRequestUriBuilder().queryParam("page", pageNumber).build();
 	}
 
 	@Override protected URI getPrevUri(UriInfo uriInfo)
 	{
-		return uriInfo.getAbsolutePathBuilder().queryParam("page", pageNumber - 1).build();
+		return uriInfo.getRequestUriBuilder().queryParam("page", pageNumber - 1).build();
 	}
 
 	@Override protected URI getNextUri(UriInfo uriInfo, CollectionModelResult<?> result)
 	{
-		return uriInfo.getAbsolutePathBuilder().queryParam("page", pageNumber + 1).build();
+		return uriInfo.getRequestUriBuilder().queryParam("page", pageNumber + 1).build();
 	}
 }

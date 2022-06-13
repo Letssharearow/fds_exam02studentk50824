@@ -9,9 +9,13 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class WebApiClient
 {
@@ -56,6 +60,33 @@ public class WebApiClient
 	public WebApiClientStates getStates()
 	{
 		return states;
+	}
+
+	public static void main(String[] args)
+	{
+		WebApiClient client = new WebApiClient();
+		for (int i = 0; i < 100; i++)
+		{
+			int leftLimit = 97; // letter 'a'
+			int rightLimit = 122; // letter 'z'
+			int targetStringLength = 10;
+			Random random = new Random();
+
+			String generatedString = random.ints(leftLimit, rightLimit + 1).limit(targetStringLength)
+				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
+
+			StudentTripView studentTripView = new StudentTripView(generatedString, 0L, null,
+				LocalDate.parse("2022-05-06"), LocalDate.parse("2022-05-06"), generatedString, generatedString,
+				generatedString);
+			try
+			{
+				client.getStates().postStudentTrip(studentTripView, "http://localhost:8080/exam02/api/StudentTrips");
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 }
 

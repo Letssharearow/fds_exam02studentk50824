@@ -24,5 +24,6 @@ public interface StudentTripUri
 	String PATH_ELEMENT = "StudentTrips";
 	String REL_PATH = Start.CONTEXT_PATH + "/api/" + PATH_ELEMENT;
 	String REL_PATH_ID = REL_PATH + "/{id}";
-	String SEARCH = REL_PATH + "?search={SEARCH}";
+	String SEARCH = REL_PATH + "?search={SERACH}";
+
 }

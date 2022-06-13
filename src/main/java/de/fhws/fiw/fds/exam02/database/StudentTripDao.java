@@ -22,5 +22,5 @@ import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 
 public interface StudentTripDao extends IDatabaseAccessObject<StudentTrip>
 {
-	CollectionModelResult<StudentTrip> readByNameAndLastName(String firstName, String lastName);
+	CollectionModelResult<StudentTrip> readBySearchParam(String serachWords);
 }

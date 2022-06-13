@@ -32,11 +32,12 @@ import javax.ws.rs.core.Response;
 @Path("StudentTrips") public class StudentTripService extends AbstractService
 {
 	@GET @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response getAllStudentTrips(
-		@DefaultValue("1") @QueryParam("page") int pageNumber)
+		@DefaultValue("1") @QueryParam("page") int pageNumber,
+		@DefaultValue("") @QueryParam("search") String searchWords)
 	{
-		return new GetAllStudentTrips.Builder().setQuery(new QueryPageParameter(pageNumber)).setUriInfo(this.uriInfo)
-			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
-			.execute();
+		return new GetAllStudentTrips.Builder().setQuery(new QueryPageParameter(pageNumber, searchWords))
+			.setUriInfo(this.uriInfo).setRequest(this.request).setHttpServletRequest(this.httpServletRequest)
+			.setContext(this.context).build().execute();
 	}
 
 	@GET @Path("{id: \\d+}") @Produces({ MediaType.APPLICATION_JSON,

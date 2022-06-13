@@ -9,6 +9,6 @@ public interface StudentTripRelTypes
 	String UPDATE_SINGLE_STUDENTTRIP = "updateStudentTrip";
 	String DELETE_SINGLE_STUDENTTRIP = "deleteStudentTrip";
 	String GET_SINGLE_STUDENTTRIP = "getStudentTrip";
-	String SEARCH_ALL_STUDENTTRIPS = "serachStudentTripByName/Time/City/Country";
+	String SEARCH_ALL_STUDENTTRIPS = "serachStudentTripByNameTimeCityCountry";
 
 }
