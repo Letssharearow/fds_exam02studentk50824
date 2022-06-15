@@ -19,8 +19,7 @@ import java.util.Random;
 
 public class WebApiClient
 {
-	private static final String URL = "http://localhost:8080/exam02/api/StudentTrips";
-	public static final String DISPATCHER_URL = "http://localhost:8080/exam02/api"; //TODO: better URL placement
+	public static final String DISPATCHER_URL = "http://localhost:8080/exam02/api";
 
 	private final OkHttpClient client;
 
