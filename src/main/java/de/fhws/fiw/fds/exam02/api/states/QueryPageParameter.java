@@ -8,17 +8,25 @@ import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 
 public class QueryPageParameter extends AbstractQuery<StudentTrip>
 {
-	private final String searchWords;
+	private final String name;
+	private final String city;
+	private final String country;
+	private final String start;
+	private final String stop;
 
-	public QueryPageParameter(int pageNumber, String searchWords)
+	public QueryPageParameter(int pageNumber, String name, String city, String country, String start, String stop)
 	{
 		super();
-		this.searchWords = searchWords;
+		this.name = name;
+		this.city = city;
+		this.country = country;
+		this.start = start;
+		this.stop = stop;
 		setPagingBehavior(new PagingPageParameter(pageNumber));
 	}
 
 	@Override protected CollectionModelResult<StudentTrip> doExecuteQuery() throws DatabaseException
 	{
-		return DaoFactory.getInstance().getStudentTripDao().readBySearchParam(searchWords); //TODO
+		return DaoFactory.getInstance().getStudentTripDao().readByNameCityCountryDate(name, city, country, start, stop);
 	}
 }

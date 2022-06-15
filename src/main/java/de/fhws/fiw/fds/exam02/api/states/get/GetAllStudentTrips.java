@@ -46,7 +46,11 @@ public class GetAllStudentTrips extends AbstractGetCollectionState<StudentTrip>
 	@Override protected void defineTransitionLinks()
 	{
 		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.GET_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
-		addLink(StudentTripUri.SEARCH, StudentTripRelTypes.SEARCH_ALL_STUDENTTRIPS, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.SEARCH_CITY, StudentTripRelTypes.SEARCH_STUDENTTRIP_BY_CITY, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.SEARCH_DATE, StudentTripRelTypes.SEARCH_STUDENTTRIP_BY_DATE, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.SEARCH_COUNTRY, StudentTripRelTypes.SEARCH_STUDENTTRIP_BY_COUNTRY,
+			MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.SEARCH_NAME, StudentTripRelTypes.SEARCH_STUDENTTRIP_BY_NAME, MediaType.APPLICATION_JSON);
 	}
 
 	@Override protected void authorizeRequest()

@@ -17,13 +17,18 @@
 package de.fhws.fiw.fds.exam02.api.services;
 
 import de.fhws.fiw.fds.exam02.api.states.QueryPageParameter;
+import de.fhws.fiw.fds.exam02.api.states.QueryPageParameterStudent;
 import de.fhws.fiw.fds.exam02.api.states.delete.DeleteSingleStudentTrip;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudentTrips;
+import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudents;
+import de.fhws.fiw.fds.exam02.api.states.get.GetSingleStudent;
 import de.fhws.fiw.fds.exam02.api.states.get.GetSingleStudentTrip;
 import de.fhws.fiw.fds.exam02.api.states.post.PostNewStudentTrip;
 import de.fhws.fiw.fds.exam02.api.states.put.PutSingleStudentTrip;
+import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
+import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -32,12 +37,14 @@ import javax.ws.rs.core.Response;
 @Path("StudentTrips") public class StudentTripService extends AbstractService
 {
 	@GET @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response getAllStudentTrips(
-		@DefaultValue("1") @QueryParam("page") int pageNumber,
-		@DefaultValue("") @QueryParam("search") String searchWords)
+		@DefaultValue("1") @QueryParam("page") int pageNumber, @DefaultValue("") @QueryParam("name") String name,
+		@DefaultValue("") @QueryParam("city") String city, @DefaultValue("") @QueryParam("country") String country,
+		@DefaultValue("") @QueryParam("start") String start, @DefaultValue("") @QueryParam("stop") String stop)
 	{
-		return new GetAllStudentTrips.Builder().setQuery(new QueryPageParameter(pageNumber, searchWords))
-			.setUriInfo(this.uriInfo).setRequest(this.request).setHttpServletRequest(this.httpServletRequest)
-			.setContext(this.context).build().execute();
+		return new GetAllStudentTrips.Builder().setQuery(
+				new QueryPageParameter(pageNumber, name, city, country, start, stop)).setUriInfo(this.uriInfo)
+			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
+			.execute();
 	}
 
 	@GET @Path("{id: \\d+}") @Produces({ MediaType.APPLICATION_JSON,
@@ -50,18 +57,30 @@ import javax.ws.rs.core.Response;
 	@GET @Path("{id: \\d+}/Students") @Produces({ MediaType.APPLICATION_JSON,
 		MediaType.APPLICATION_XML }) public Response getStudentsFromStudentTrip(@PathParam("id") final long id)
 	{
-		return new GetSingleStudentTrip.Builder().setRequestedId(id).setUriInfo(this.uriInfo).setRequest(this.request)
-			.setHttpServletRequest(this.httpServletRequest).setContext(this.context).build().execute();
-		//TODO
+		SingleModelResult<StudentTrip> studentTrip = DaoFactory.getInstance().getStudentTripDao().readById(id);
+		if (studentTrip.isEmpty())
+		{
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+		return new GetAllStudents.Builder().setQuery(
+				new QueryPageParameterStudent(studentTrip.getResult().getStudentIds())).setUriInfo(this.uriInfo)
+			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
+			.execute();
 	}
 
 	@GET @Path("{StudentTripId: \\d+}/Students/{StudentId: \\d+}") @Produces({ MediaType.APPLICATION_JSON,
 		MediaType.APPLICATION_XML }) public Response getSingleStudentFromStudentTrip(
 		@PathParam("StudentTripId") final long studentTripId, @PathParam("StudentId") final long studentId)
 	{
-		return new GetSingleStudentTrip.Builder().setRequestedId(studentTripId).setUriInfo(this.uriInfo)
+		SingleModelResult<StudentTrip> studentTrip = DaoFactory.getInstance().getStudentTripDao()
+			.readById(studentTripId);
+		if (studentTrip.isEmpty() || !studentTrip.getResult().getStudentIds().contains(studentId))
+		{
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+		return new GetSingleStudent.Builder().setRequestedId(studentId).setUriInfo(this.uriInfo)
 			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
-			.execute();//TODO
+			.execute();
 	}
 
 	@POST @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response createSingleStudentTrip(

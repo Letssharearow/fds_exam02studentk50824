@@ -35,69 +35,66 @@ public abstract class AbstractInMemoryStorage<T extends AbstractModel>
 
 	private final AtomicLong nextId;
 
-	protected AbstractInMemoryStorage( )
+	protected AbstractInMemoryStorage()
 	{
-		this.storage = new HashMap<>( );
-		this.nextId = new AtomicLong( 1l );
+		this.storage = new HashMap<>();
+		this.nextId = new AtomicLong(1l);
 	}
 
-	public NoContentResult create( final T model )
+	public NoContentResult create(final T model)
 	{
-		model.setId( nextId( ) );
-		this.storage.put( model.getId( ), model );
-		return new NoContentResult( );
+		model.setId(nextId());
+		this.storage.put(model.getId(), model);
+		return new NoContentResult();
 	}
 
-	public SingleModelResult<T> readById( final long id )
+	public SingleModelResult<T> readById(final long id)
 	{
-		if ( this.storage.containsKey( id ) )
+		if (this.storage.containsKey(id))
 		{
-			return new SingleModelResult<>( clone( this.storage.get( id ) ) );
+			return new SingleModelResult<>(clone(this.storage.get(id)));
 		}
 		else
 		{
-			return new SingleModelResult<>( );
+			return new SingleModelResult<>();
 		}
 	}
 
-	public CollectionModelResult<T> readByPredicate( final Predicate<T> predicate )
+	public CollectionModelResult<T> readByPredicate(final Predicate<T> predicate)
 	{
-		return new CollectionModelResult( clone( filterBy( predicate ) ) );
+		return new CollectionModelResult(clone(filterBy(predicate)));
 	}
 
-	private Collection<T> filterBy( final Predicate<T> predicate )
+	private Collection<T> filterBy(final Predicate<T> predicate)
 	{
-		return this.storage.values( )
-						   .stream( )
-						   .filter( predicate )
-						   .collect( Collectors.toList( ) );
+		return this.storage.values().stream().filter(predicate).collect(Collectors.toList());
 	}
 
-	public NoContentResult update( final T model )
+	public NoContentResult update(final T model)
 	{
-		this.storage.put( model.getId( ), model );
-		return new NoContentResult( );
+		this.storage.put(model.getId(), model);
+		return new NoContentResult();
 	}
 
-	public NoContentResult delete( final long id )
+	public NoContentResult delete(final long id)
 	{
-		this.storage.remove( id );
-		return new NoContentResult( );
+		this.storage.remove(id);
+		return new NoContentResult();
 	}
 
-	private final long nextId( )
+	private final long nextId()
 	{
-		return this.nextId.getAndIncrement( );
+		return this.nextId.getAndIncrement();
 	}
 
-	private Collection<T> clone( final Collection<T> result )
+	private Collection<T> clone(final Collection<T> result)
 	{
-		return result.stream( ).map( e -> clone( e ) ).collect( Collectors.toList( ) );
+		return result.stream().map(e -> clone(e)).collect(Collectors.toList());
 	}
 
-	private T clone( final T result )
+	protected T clone(final T result)
 	{
-		final T clone = ( T ) ObjectUtils.cloneIfPossible( result );
+		final T clone = (T) ObjectUtils.cloneIfPossible(result);
 		return clone;
 	}
 

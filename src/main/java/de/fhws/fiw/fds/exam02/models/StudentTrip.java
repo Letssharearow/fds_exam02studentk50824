@@ -1,9 +1,13 @@
 package de.fhws.fiw.fds.exam02.models;
 
 import com.owlike.genson.annotation.JsonConverter;
-import de.fhws.fiw.fds.sutton.client.Link;
+
+import javax.ws.rs.core.Link;
+
+import de.fhws.fiw.fds.sutton.server.api.converter.JsonServerLinkConverter;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import de.fhws.fiw.fds.sutton.utils.JsonDateTimeConverter;
+import de.fhws.fiw.fds.sutton.utils.UriHelper;
 import de.fhws.fiw.fds.sutton.utils.XmlDateTimeConverter;
 import org.glassfish.jersey.linking.InjectLink;
 
@@ -16,33 +20,62 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @XmlRootElement @XmlAccessorType(XmlAccessType.FIELD) public class StudentTrip extends AbstractModel
 	implements Serializable
 {
-	@InjectLink(style = InjectLink.Style.ABSOLUTE, value = "/studentTrips/${instance.id}", rel = "self", type = "application/json") private Link selfLink;
+	//@InjectLink(style = InjectLink.Style.ABSOLUTE, value = "/StudentTrips/${instance.id}", rel = "self", type = "application/json") private Link selfLink;
+	@InjectLink(style = InjectLink.Style.ABSOLUTE, value = "/StudentTrips/${instance.id}/Students", rel = "getStudents", type = "application/json", title = "students", condition = "${!instance.studentIds.isEmpty()}") private Link studentsLink;
 	private String name;
-	private Collection<Student> students;
 	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate start; //without time
 	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate end;
 	private String partnerUniversity;
 	private String city;
 	private String country;
 
-	public StudentTrip(String name, Collection<Student> students, LocalDate start, LocalDate end,
-		String partnerUniversity, String city, String country)
+	private Set<Long> studentIds;
+
+	public StudentTrip(String name, LocalDate start, LocalDate end, String partnerUniversity, String city,
+		String country, Set<Long> studentIds)
 	{
+		this.studentsLink = studentsLink;
 		this.name = name;
-		this.students = students;
 		this.start = start;
 		this.end = end;
 		this.partnerUniversity = partnerUniversity;
 		this.city = city;
 		this.country = country;
+		this.studentIds = studentIds;
 	}
 
 	public StudentTrip()
 	{
+	}
+
+	@JsonConverter(JsonServerLinkConverter.class) public Link getStudentsLink()
+	{
+		return studentsLink;
+	}
+
+	@JsonConverter(JsonServerLinkConverter.class)
+
+	public void setStudentsLink(Link studentsLink)
+	{
+		this.studentsLink = studentsLink;
+		long id = UriHelper.getLastPathElementAsId(this.studentsLink);
+		this.getStudentIds().add(id);
+	}
+
+	public Set<Long> getStudentIds()
+	{
+		return studentIds;
+	}
+
+	public void setStudentIds(Set<Long> studentIds)
+	{
+		this.studentIds = studentIds;
 	}
 
 	public String getName()
@@ -53,16 +86,6 @@ import java.util.Date;
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-
-	public Collection<Student> getStudents()
-	{
-		return students;
-	}
-
-	public void setStudents(Collection<Student> students)
-	{
-		this.students = students;
 	}
 
 	@JsonConverter(JsonDateTimeConverter.class)
