@@ -34,43 +34,10 @@ import java.util.function.Predicate;
 
 public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentTrip> implements StudentTripDao
 {
-	private final String regex = "OR";
-
 	public StudentTripInMemoryStorage()
 	{
 		super();
 		populateData();
-	}
-
-	//	public CollectionModelResult<StudentTrip> readBySearchParam(String serachWords)
-	//	{
-	//		return readByPredicate(bySearch(serachWords.split(regex)));
-	//	}
-
-	@Override public SingleModelResult<StudentTrip> readById(final long id)
-	{
-		if (this.storage.containsKey(id))
-		{
-			StudentTrip studentTrip = this.storage.get(id);
-			removeOutdatedStudentIds(studentTrip);
-			return new SingleModelResult<>(clone(this.storage.get(id)));
-		}
-		else
-		{
-			return new SingleModelResult<>();
-		}
-	}
-
-	private void removeOutdatedStudentIds(StudentTrip studentTrip)
-	{
-		//		Set<Long> studentIds = studentTrip.getStudentIds();
-		//		StudentDao studentDao = DaoFactory.getInstance().getStudentDao();
-		//		studentIds.forEach(st -> {
-		//			if (studentDao.readById(st).isEmpty())
-		//			{
-		//				studentIds.remove(st);
-		//			}
-		//		});
 	}
 
 	public CollectionModelResult<StudentTrip> order(CollectionModelResult<StudentTrip> result)
@@ -89,31 +56,10 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 	@Override public CollectionModelResult<StudentTrip> readByNameCityCountryDate(String name, String city,
 		String country, String start, String stop)
 	{
-		return readByPredicate(studentTrip -> {
-			removeOutdatedStudentIds(studentTrip);
-			return matchString(studentTrip.getName(), name) && matchString(studentTrip.getCity(), city) && matchString(
-				studentTrip.getCountry(), country) && matchTimeperiod(studentTrip, start, stop);
-		});
+		return readByPredicate(
+			studentTrip -> matchString(studentTrip.getName(), name) && matchString(studentTrip.getCity(), city)
+				&& matchString(studentTrip.getCountry(), country) && matchTimeperiod(studentTrip, start, stop));
 	}
-
-	//	private Predicate<StudentTrip> bySearch(final String[] searchWords)
-	//	{
-	//		return p -> matchAllWords(p, searchWords);
-	//	}
-
-	//Filtering Name, Timeperiod, City, Country
-	//	private boolean matchAllWords(final StudentTrip studentTrip, final String[] words)
-	//	{
-	//		for (String word : words)
-	//		{
-	//			word = word.toLowerCase(Locale.ROOT);
-	//			if (matchString(studentTrip.getName().toLowerCase(Locale.ROOT), word) || matchString(
-	//				studentTrip.getCity().toLowerCase(Locale.ROOT), word) || matchString(
-	//				studentTrip.getCountry().toLowerCase(Locale.ROOT), word) || matchTimeperiod(studentTrip, word))
-	//				return true;
-	//		}
-	//		return false;
-	//	}
 
 	private boolean matchString(String variable, String value)
 	{
