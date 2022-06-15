@@ -82,7 +82,7 @@ public abstract class AbstractInMemoryStorage<T extends AbstractModel>
 		return new NoContentResult();
 	}
 
-	private final long nextId()
+	protected final long nextId()
 	{
 		return this.nextId.getAndIncrement();
 	}

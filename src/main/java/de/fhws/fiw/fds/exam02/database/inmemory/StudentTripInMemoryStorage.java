@@ -23,9 +23,12 @@ import de.fhws.fiw.fds.exam02.models.Student;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.database.inmemory.AbstractInMemoryStorage;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
+import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 import org.apache.commons.lang.StringUtils;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -49,8 +52,11 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 	{
 		LocalDate date = LocalDate.of(1960, 2, 9);
 		HashSet<Long> set = new HashSet<>();
-		set.add(1L);
-		create(new StudentTrip("Felix", date, date, "partnerUni", "city", "country", set));
+		//set.add(1L);
+		StudentTrip model = new StudentTrip("Felix", date, date, "partnerUni", "city", "country", set);
+		model.setId(nextId());
+		this.storage.put(model.getId(), model);
+
 	}
 
 	@Override public CollectionModelResult<StudentTrip> readByNameCityCountryDate(String name, String city,
@@ -59,6 +65,21 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 		return readByPredicate(
 			studentTrip -> matchString(studentTrip.getName(), name) && matchString(studentTrip.getCity(), city)
 				&& matchString(studentTrip.getCountry(), country) && matchTimeperiod(studentTrip, start, stop));
+	}
+
+	@Override public NoContentResult create(final StudentTrip model)
+	{
+		Set<Long> studentIds = model.getStudentIds();
+		StudentDao studentDao = DaoFactory.getInstance().getStudentDao();
+		studentIds.forEach(studentId -> {
+			if (studentDao.readById(studentId).isEmpty())
+			{
+				throw new WebApplicationException(Response.Status.BAD_REQUEST);
+			}
+		});
+		model.setId(nextId());
+		this.storage.put(model.getId(), model);
+		return new NoContentResult();
 	}
 
 	private boolean matchString(String variable, String value)

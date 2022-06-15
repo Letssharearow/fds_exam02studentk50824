@@ -40,7 +40,6 @@ import java.util.Set;
 	public StudentTrip(String name, LocalDate start, LocalDate end, String partnerUniversity, String city,
 		String country, Set<Long> studentIds)
 	{
-		this.studentsLink = studentsLink;
 		this.name = name;
 		this.start = start;
 		this.end = end;
@@ -100,7 +99,7 @@ import java.util.Set;
 	public void setStart(LocalDate start)
 	{
 		this.start = start;
-	}
+	} //TODO: make names consistent "start" and "end"
 
 	@JsonConverter(JsonDateTimeConverter.class)
 
