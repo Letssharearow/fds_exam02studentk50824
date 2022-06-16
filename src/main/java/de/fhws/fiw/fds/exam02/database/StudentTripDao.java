@@ -23,6 +23,11 @@ import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 public interface StudentTripDao extends IDatabaseAccessObject<StudentTrip>
 {
 	CollectionModelResult<StudentTrip> readByNameCityCountryDate(String name, String city, String country, String start,
-		String stop);
+		String end);
 
+	void CheckForInvalidStudentIds(StudentTrip model);
+
+	boolean matchString(String variable, String value);
+
+	boolean matchTimeperiod(StudentTrip studentTrip, String start, String end);
 }

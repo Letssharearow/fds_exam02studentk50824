@@ -45,8 +45,10 @@ public class GetSingleStudentTrip extends AbstractGetState<StudentTrip>
 
 	@Override protected void defineTransitionLinks()
 	{
-		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.UPDATE_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
-		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.DELETE_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.REL_PATH_ID.replaceAll("\\{id}", this.loadModel().getResult().getId() + ""),
+			StudentTripRelTypes.UPDATE_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.REL_PATH_ID.replaceAll("\\{id}", this.loadModel().getResult().getId() + ""),
+			StudentTripRelTypes.DELETE_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
 		addLink(StudentTripUri.REL_PATH, StudentTripRelTypes.GET_ALL_STUDENTTRIPS, MediaType.APPLICATION_JSON);
 	}
 

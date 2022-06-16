@@ -12,21 +12,21 @@ public class QueryPageParameter extends AbstractQuery<StudentTrip>
 	private final String city;
 	private final String country;
 	private final String start;
-	private final String stop;
+	private final String end;
 
-	public QueryPageParameter(int pageNumber, String name, String city, String country, String start, String stop)
+	public QueryPageParameter(int pageNumber, String name, String city, String country, String start, String end)
 	{
 		super();
 		this.name = name;
 		this.city = city;
 		this.country = country;
 		this.start = start;
-		this.stop = stop;
+		this.end = end;
 		setPagingBehavior(new PagingPageParameter(pageNumber));
 	}
 
 	@Override protected CollectionModelResult<StudentTrip> doExecuteQuery() throws DatabaseException
 	{
-		return DaoFactory.getInstance().getStudentTripDao().readByNameCityCountryDate(name, city, country, start, stop);
+		return DaoFactory.getInstance().getStudentTripDao().readByNameCityCountryDate(name, city, country, start, end);
 	}
 }

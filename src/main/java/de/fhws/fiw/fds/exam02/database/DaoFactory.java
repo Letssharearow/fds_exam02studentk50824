@@ -16,6 +16,7 @@
 
 package de.fhws.fiw.fds.exam02.database;
 
+import de.fhws.fiw.fds.exam02.database.inmemory.AbstractStudentAndTripStorage;
 import de.fhws.fiw.fds.exam02.database.inmemory.StudentInMemoryStorage;
 import de.fhws.fiw.fds.exam02.database.inmemory.StudentTripInMemoryStorage;
 
@@ -33,22 +34,20 @@ public class DaoFactory
 		return INSTANCE;
 	}
 
-	private final StudentTripDao studentTripDao;
-	private final StudentDao studentDao;
+	private final AbstractStudentAndTripStorage abstractStudentAndTripStorage;
 
 	private DaoFactory()
 	{
-		this.studentTripDao = new StudentTripInMemoryStorage();
-		this.studentDao = new StudentInMemoryStorage();
+		this.abstractStudentAndTripStorage = new AbstractStudentAndTripStorage();
 	}
 
 	public StudentTripDao getStudentTripDao()
 	{
-		return this.studentTripDao;
+		return this.abstractStudentAndTripStorage.getStudentTripDao();
 	}
 
 	public StudentDao getStudentDao()
 	{
-		return this.studentDao;
+		return this.abstractStudentAndTripStorage.getStudentDao();
 	}
 }

@@ -25,4 +25,6 @@ import java.util.Set;
 public interface StudentDao extends IDatabaseAccessObject<Student>
 {
 	CollectionModelResult<Student> readStudentsById(Set<Long> id);
+
+	void removeStudentFromTrips(long id);
 }

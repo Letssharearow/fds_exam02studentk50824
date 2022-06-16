@@ -1,8 +1,6 @@
 package de.fhws.fiw.fds.exam02.api.services;
 
 import de.fhws.fiw.fds.exam02.api.states.QueryAllStudents;
-import de.fhws.fiw.fds.exam02.api.states.QueryPageParameter;
-import de.fhws.fiw.fds.exam02.api.states.QueryPageParameterStudent;
 import de.fhws.fiw.fds.exam02.api.states.delete.DeleteSingleStudent;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudents;
 import de.fhws.fiw.fds.exam02.api.states.get.GetSingleStudent;
@@ -14,8 +12,6 @@ import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.HashSet;
-import java.util.Set;
 
 @Path("Students") public class StudentService extends AbstractService
 {

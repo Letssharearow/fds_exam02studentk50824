@@ -74,12 +74,11 @@ public class WebApiClient
 			String generatedString = random.ints(leftLimit, rightLimit + 1).limit(targetStringLength)
 				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
 
-			StudentTripView studentTripView = new StudentTripView(generatedString, 0L, null,
-				LocalDate.parse("2022-05-06"), LocalDate.parse("2022-05-06"), generatedString, generatedString,
-				generatedString);
+			StudentTripView studentTripView = new StudentTripView(generatedString, 0L, LocalDate.parse("2022-05-06"),
+				LocalDate.parse("2022-05-06"), generatedString, generatedString, generatedString, null);
 			try
 			{
-				client.getStates().postStudentTrip(studentTripView, "http://localhost:8080/exam02/api/StudentTrips");
+				client.getStates().postStudentTrip("http://localhost:8080/exam02/api/StudentTrips", studentTripView);
 			}
 			catch (IOException e)
 			{

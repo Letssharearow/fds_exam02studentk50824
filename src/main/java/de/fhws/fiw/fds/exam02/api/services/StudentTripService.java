@@ -17,7 +17,7 @@
 package de.fhws.fiw.fds.exam02.api.services;
 
 import de.fhws.fiw.fds.exam02.api.states.QueryPageParameter;
-import de.fhws.fiw.fds.exam02.api.states.QueryPageParameterStudent;
+import de.fhws.fiw.fds.exam02.api.states.QueryStudent;
 import de.fhws.fiw.fds.exam02.api.states.delete.DeleteSingleStudentTrip;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudentTrips;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudents;
@@ -37,12 +37,12 @@ import javax.ws.rs.core.Response;
 @Path("StudentTrips") public class StudentTripService extends AbstractService
 {
 	@GET @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response getAllStudentTrips(
-		@DefaultValue("1") @QueryParam("page") int pageNumber, @DefaultValue("") @QueryParam("name") String name,
+		@DefaultValue("1") @QueryParam("page") final int pageNumber, @DefaultValue("") @QueryParam("name") String name,
 		@DefaultValue("") @QueryParam("city") String city, @DefaultValue("") @QueryParam("country") String country,
-		@DefaultValue("") @QueryParam("start") String start, @DefaultValue("") @QueryParam("stop") String stop)
+		@DefaultValue("") @QueryParam("start") String start, @DefaultValue("") @QueryParam("end") String end)
 	{
 		return new GetAllStudentTrips.Builder().setQuery(
-				new QueryPageParameter(pageNumber, name, city, country, start, stop)).setUriInfo(this.uriInfo)
+				new QueryPageParameter(pageNumber, name, city, country, start, end)).setUriInfo(this.uriInfo)
 			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
 			.execute();
 	}
@@ -55,7 +55,8 @@ import javax.ws.rs.core.Response;
 	}
 
 	@GET @Path("{id: \\d+}/Students") @Produces({ MediaType.APPLICATION_JSON,
-		MediaType.APPLICATION_XML }) public Response getStudentsFromStudentTrip(@PathParam("id") final long id)
+		MediaType.APPLICATION_XML }) public Response getStudentsFromStudentTrip(@PathParam("id") final long id,
+		@QueryParam("page") @DefaultValue("1") final int pageNumber)
 	{
 		SingleModelResult<StudentTrip> studentTrip = DaoFactory.getInstance().getStudentTripDao().readById(id);
 		if (studentTrip.isEmpty())
@@ -63,7 +64,7 @@ import javax.ws.rs.core.Response;
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 		return new GetAllStudents.Builder().setQuery(
-				new QueryPageParameterStudent(studentTrip.getResult().getStudentIds())).setUriInfo(this.uriInfo)
+				new QueryStudent(studentTrip.getResult().getStudentIds(), pageNumber)).setUriInfo(this.uriInfo)
 			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
 			.execute();
 	}

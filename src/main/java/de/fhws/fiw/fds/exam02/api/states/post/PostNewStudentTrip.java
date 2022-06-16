@@ -45,7 +45,8 @@ public class PostNewStudentTrip extends AbstractPostState<StudentTrip>
 
 	@Override protected void defineTransitionLinks()
 	{
-		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.GET_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.REL_PATH_ID.replaceAll("\\{id}", this.modelToStore.getId() + ""),
+			StudentTripRelTypes.GET_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
 	}
 
 	public static class Builder extends AbstractPostStateBuilder<StudentTrip>

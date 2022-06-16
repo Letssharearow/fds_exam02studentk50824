@@ -37,6 +37,20 @@ public class WebApiClientStates
 		}
 	}
 
+	public WebApiResponse loadStudentTripByURL(String url) throws IOException
+	{
+		final Response response = sendGetRequest(url);
+		try
+		{
+			return new WebApiResponse(WebApiClient.deserializeToStudentTrip(genson, response), response.code(),
+				getHypermediaLinks(response));
+		}
+		catch (JsonBindingException e)
+		{
+			return new WebApiResponse(response.code(), getHypermediaLinks(response));
+		}
+	}
+
 	public WebApiResponse loadAllStudentTripsByUrl(String url) throws IOException
 	{
 		final Response response = sendGetRequest(url);
@@ -53,9 +67,9 @@ public class WebApiClientStates
 		}
 	}
 
-	public WebApiResponse postStudentTrip(StudentTripView studentTrip, String url) throws IOException
+	public WebApiResponse postStudentTrip(String url, StudentTripView studentTrip) throws IOException
 	{
-		final Response response = sendPostRequest(studentTrip, url);
+		final Response response = sendPostRequest(url, studentTrip);
 		return new WebApiResponse(response.code(), getHypermediaLinks(response));
 	}
 
@@ -65,9 +79,15 @@ public class WebApiClientStates
 		return new WebApiResponse(response.code(), getHypermediaLinks(response));
 	}
 
-	public WebApiResponse deleteStudentTrip(long studentTripId, String url) throws IOException
+	public WebApiResponse deleteStudentTrip(String url, long studentTripId) throws IOException
 	{
-		final Response response = sendDeleteRequest(studentTripId, url);
+		final Response response = sendDeleteRequest(combineUrlAndId(url, studentTripId));
+		return new WebApiResponse(response.code(), getHypermediaLinks(response));
+	}
+
+	public WebApiResponse deleteStudentTrip(String url) throws IOException
+	{
+		final Response response = sendDeleteRequest(url);
 		return new WebApiResponse(response.code(), getHypermediaLinks(response));
 	}
 
@@ -124,16 +144,16 @@ public class WebApiClientStates
 		return this.client.newCall(request).execute();
 	}
 
-	private Response sendPostRequest(final StudentTripView studentTripViewstudentTrip, String url) throws IOException
+	private Response sendPostRequest(String url, final StudentTripView studentTripViewstudentTrip) throws IOException
 	{
 		final Request request = new Request.Builder().url(url)
 			.post(WebApiClient.getStudentTripRequestBody(genson, studentTripViewstudentTrip)).build();
 		return this.client.newCall(request).execute();
 	}
 
-	private Response sendDeleteRequest(final long id, String url) throws IOException
+	private Response sendDeleteRequest(String url) throws IOException
 	{
-		return sendDeleteRequestByURL(combineUrlAndId(url, id));
+		return sendDeleteRequestByURL(url);
 	}
 
 	private Response sendDeleteRequestByURL(final String url) throws IOException

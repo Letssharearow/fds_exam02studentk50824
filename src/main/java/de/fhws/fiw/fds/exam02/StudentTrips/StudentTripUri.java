@@ -26,7 +26,7 @@ public interface StudentTripUri
 	String REL_PATH_ID = REL_PATH + "/{id}";
 	String SEARCH_NAME = REL_PATH + "?name=Name";
 	String SEARCH_CITY = REL_PATH + "?city=City";
-	String SEARCH_COUNTRY = REL_PATH + "?city=City";
-	String SEARCH_DATE = REL_PATH + "?start=1900-01-22&stop=2022-12-05";
+	String SEARCH_COUNTRY = REL_PATH + "?country=Country";
+	String SEARCH_DATE = REL_PATH + "?start=1900-01-22&end=2022-12-05";
 
 }
