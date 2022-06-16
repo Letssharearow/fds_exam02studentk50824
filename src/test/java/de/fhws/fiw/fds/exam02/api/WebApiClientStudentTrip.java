@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class WebApiClientStates
+public class WebApiClientStudentTrip
 {
 	private OkHttpClient client;
 
 	private Genson genson;
 
-	public WebApiClientStates(OkHttpClient client, Genson genson)
+	public WebApiClientStudentTrip(OkHttpClient client, Genson genson)
 	{
 		this.client = client;
 		this.genson = genson;
