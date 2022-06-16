@@ -1,9 +1,11 @@
 package de.fhws.fiw.fds.exam02.testClasses;
 
-import de.fhws.fiw.fds.exam02.api.WebApiClient;
-import de.fhws.fiw.fds.exam02.api.WebApiResponse;
-import de.fhws.fiw.fds.exam02.models.StudentTripView;
+import com.owlike.genson.Genson;
+import de.fhws.fiw.fds.exam02.api.*;
+import de.fhws.fiw.fds.exam02.api.AbstractClient;
+import de.fhws.fiw.fds.exam02.models.Student;
 import junit.framework.TestFailure;
+import okhttp3.Response;
 import org.junit.Test;
 import org.junit.internal.runners.statements.Fail;
 
@@ -11,33 +13,25 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
 
-class TestStudentHypermedia
+public class TestStudentHypermedia
 {
 
-	public StudentTripView getEmptyStudentTripView()
+	public Student getEmptyStudent()
 	{
 		Set<Long> ids = new HashSet<>();
 
-		return new StudentTripView("template", 0L, LocalDate.of(1960, 2, 9), LocalDate.of(1861, 3, 10), "partnerUni",
-			"city", "country", ids);
+		return null; //TODO;
 	}
 
 	@Test public void testDispatcherLinks()
 	{
-		final WebApiClient client = new WebApiClient();
+		final AbstractClient<Student> client = new WebApiClientStudent();
 		WebApiResponse response = null;
-		try
-		{
-			response = client.getStates().getDispatcher();
-		}
-		catch (IOException e)
-		{
-			fail(e.getMessage());
-		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link_get = links.get("getAllStudentTrips");
@@ -56,39 +50,40 @@ class TestStudentHypermedia
 		assertEquals("http://localhost:8080/exam02/api", link_self.get("link"));
 	}
 
-	public WebApiResponse getDispatcherState(WebApiClient client) throws IOException
+	public AbstractWebApiResponse<Student> getDispatcherState(AbstractClient<Student> client) throws IOException
 	{
-		return client.getStates().getDispatcher();
+		return client.getDispatcher();
 	}
 
-	public WebApiResponse getGetAllStudenTripsState(WebApiClient client) throws IOException
+	public AbstractWebApiResponse<Student> getGetAllStudenTripsState(AbstractClient<Student> client) throws IOException
 	{
 		String url = getDispatcherState(client).getLink("getAllStudentTrips");
-		return client.getStates().loadAllStudentTripsByUrl(url);
+		return client.loadAllObjectsByUrl(url);
 	}
 
-	public WebApiResponse getCreateStudenTripState(WebApiClient client, StudentTripView studentTripView)
-		throws IOException
+	public AbstractWebApiResponse<Student> getCreateStudenTripState(AbstractClient<Student> client,
+		Student studentTripView) throws IOException
 	{
 		String url = getDispatcherState(client).getLink("createStudentTrip");
-		return client.getStates().postStudentTrip(url, studentTripView);
+		return client.postObject(url, studentTripView);
 	}
 
-	public WebApiResponse getGetSingleStudentTripState(WebApiClient client) throws IOException
+	public AbstractWebApiResponse<Student> getGetSingleStudentTripState(AbstractClient<Student> client)
+		throws IOException
 	{
 
 		String postUrl = getDispatcherState(client).getLink("createStudentTrip");
-		WebApiResponse postResponse = client.getStates().postStudentTrip(postUrl, getEmptyStudentTripView());
+		AbstractWebApiResponse<Student> postResponse = client.postObject(postUrl, getEmptyStudent());
 		String getUrl = postResponse.getLink("getStudentTrip");
-		WebApiResponse returnValue = client.getStates().loadStudentTripByURL(getUrl);
-		client.getStates().deleteStudentTrip(returnValue.getLink("deleteStudentTrip"));
+		AbstractWebApiResponse<Student> returnValue = client.loadObjectByURL(getUrl);
+		client.deleteObject(returnValue.getLink("deleteStudentTrip"));
 		return returnValue;
 	}
 
 	@Test public void testGetAllStudentTripsHypermeidaGetSingleStudentripLink()
 	{
-		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = null;
+		final AbstractClient<Student> client = new WebApiClientStudent();
+		AbstractWebApiResponse<Student> response = null;
 		try
 		{
 			response = getGetAllStudenTripsState(client);
@@ -107,8 +102,8 @@ class TestStudentHypermedia
 
 	@Test public void testGetAllStudentTripsHypermeidaSearchByNameLink()
 	{
-		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = null;
+		final AbstractClient<Student> client = new WebApiClientStudent();
+		AbstractWebApiResponse<Student> response = null;
 		try
 		{
 			response = getGetAllStudenTripsState(client);
@@ -127,8 +122,8 @@ class TestStudentHypermedia
 
 	@Test public void testGetAllStudentTripsHypermeidaSearchByCityLink()
 	{
-		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = null;
+		final AbstractClient<Student> client = new WebApiClientStudent();
+		AbstractWebApiResponse<Student> response = null;
 		try
 		{
 			response = getGetAllStudenTripsState(client);
@@ -147,8 +142,8 @@ class TestStudentHypermedia
 
 	@Test public void testGetAllStudentTripsHypermeidaSearchByCountryLink()
 	{
-		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = null;
+		final AbstractClient<Student> client = new WebApiClientStudent();
+		AbstractWebApiResponse<Student> response = null;
 		try
 		{
 			response = getGetAllStudenTripsState(client);
@@ -168,8 +163,8 @@ class TestStudentHypermedia
 
 	@Test public void testGetAllStudentTripsHypermeidaSearchByDateLink()
 	{
-		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = null;
+		final AbstractClient<Student> client = new WebApiClientStudent();
+		AbstractWebApiResponse<Student> response = null;
 		try
 		{
 			response = getGetAllStudenTripsState(client);
@@ -189,8 +184,8 @@ class TestStudentHypermedia
 
 	@Test public void testGetSingleStudentTripsHypermeidaDelete()
 	{
-		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = null;
+		final AbstractClient<Student> client = new WebApiClientStudent();
+		AbstractWebApiResponse<Student> response = null;
 		try
 		{
 			response = getGetSingleStudentTripState(client);
@@ -211,8 +206,8 @@ class TestStudentHypermedia
 
 	@Test public void testGetSingleStudentTripsHypermeidaPut()
 	{
-		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = null;
+		final AbstractClient<Student> client = new WebApiClientStudent();
+		AbstractWebApiResponse<Student> response = null;
 		try
 		{
 			response = getGetSingleStudentTripState(client);
@@ -233,8 +228,8 @@ class TestStudentHypermedia
 
 	@Test public void testGetSingleStudentTripsHypermeidaSelf()
 	{
-		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = null;
+		final AbstractClient<Student> client = new WebApiClientStudent();
+		AbstractWebApiResponse<Student> response = null;
 		try
 		{
 			response = getGetSingleStudentTripState(client);
@@ -255,8 +250,8 @@ class TestStudentHypermedia
 
 	@Test public void testGetSingleStudentTripsHypermeidaGetAllStudentTrips()
 	{
-		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = null;
+		final AbstractClient<Student> client = new WebApiClientStudent();
+		AbstractWebApiResponse<Student> response = null;
 		try
 		{
 			response = getGetSingleStudentTripState(client);

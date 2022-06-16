@@ -2,31 +2,21 @@ package de.fhws.fiw.fds.exam02.models;
 
 import com.owlike.genson.annotation.JsonConverter;
 
-import javax.ws.rs.core.Link;
-
-import de.fhws.fiw.fds.sutton.server.api.converter.JsonServerLinkConverter;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import de.fhws.fiw.fds.sutton.utils.JsonDateTimeConverter;
-import de.fhws.fiw.fds.sutton.utils.UriHelper;
 import de.fhws.fiw.fds.sutton.utils.XmlDateTimeConverter;
-import org.glassfish.jersey.linking.InjectLink;
 
-import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @XmlRootElement @XmlAccessorType(XmlAccessType.FIELD) public class StudentTripView extends AbstractModel
 	implements Serializable
 {
-	private Link studentsLink;
 	private String name;
 	private long id;
 
@@ -65,25 +55,6 @@ import java.util.Set;
 		this.id = id;
 	}
 
-	@JsonConverter(JsonServerLinkConverter.class) public Link getStudentsLink()
-	{
-		return studentsLink;
-	}
-
-	@JsonConverter(JsonServerLinkConverter.class)
-
-	public void setStudentsLink(Link studentsLink)
-	{
-		this.studentsLink = studentsLink;
-		long id = UriHelper.getLastPathElementAsId(this.studentsLink);
-		this.getStudentIds().add(id);
-	}
-
-	public Set<Long> getStudentIds()
-	{
-		return studentIds;
-	}
-
 	public void setStudentIds(Set<Long> studentIds)
 	{
 		this.studentIds = studentIds;
@@ -111,7 +82,7 @@ import java.util.Set;
 	public void setStart(LocalDate start)
 	{
 		this.start = start;
-	} //TODO: make names consistent "start" and "end"
+	}
 
 	@JsonConverter(JsonDateTimeConverter.class)
 

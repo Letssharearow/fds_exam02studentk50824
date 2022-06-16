@@ -27,7 +27,7 @@ import java.util.Set;
 	implements Serializable
 {
 	//@InjectLink(style = InjectLink.Style.ABSOLUTE, value = "/StudentTrips/${instance.id}", rel = "self", type = "application/json") private Link selfLink;
-	@InjectLink(style = InjectLink.Style.ABSOLUTE, value = "/StudentTrips/${instance.id}/Students", rel = "getStudents", type = "application/json", title = "students", condition = "${!instance.studentIds.isEmpty()}") private Link studentsLink;
+	@InjectLink(style = InjectLink.Style.ABSOLUTE, value = "/StudentTrips/${instance.id}/Students", rel = "getStudents", type = "application/json", title = "studentsLink", condition = "${!instance.studentIds.isEmpty()}") private Link studentsLink;
 	private String name;
 	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate start; //without time
 	@XmlJavaTypeAdapter(XmlDateTimeConverter.class) private LocalDate end;

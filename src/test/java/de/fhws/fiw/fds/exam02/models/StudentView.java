@@ -1,8 +1,10 @@
 package de.fhws.fiw.fds.exam02.models;
 
+import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
+
 import java.io.Serializable;
 
-public class StudentView implements Serializable
+public class StudentView extends AbstractModel implements Serializable
 {
 	protected String firstName;
 	protected String lastName;

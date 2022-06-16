@@ -1,11 +1,16 @@
 package de.fhws.fiw.fds.exam02.api;
 
+import com.owlike.genson.GenericType;
 import com.owlike.genson.Genson;
 import com.owlike.genson.JsonBindingException;
+import de.fhws.fiw.fds.exam02.models.Student;
+import de.fhws.fiw.fds.exam02.models.StudentTripView;
+import de.fhws.fiw.fds.exam02.models.StudentView;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,84 +28,84 @@ public abstract class AbstractClient<T extends AbstractModel>
 		this.genson = new Genson();
 	}
 
-	public AbstractWebApiResponse loadObjectByURL(String url, long id) throws IOException
+	public AbstractWebApiResponse<T> loadObjectByURL(String url, long id) throws IOException
 	{
 		final Response response = sendGetRequest(combineUrlAndId(url, id));
 		try
 		{
-			return new AbstractWebApiResponse<T>(deserializeToObject(genson, response), response.code(),
+			return new AbstractWebApiResponse<T>(deserializeToObject(genson, response.body().string()), response.code(),
 				getHypermediaLinks(response));
 		}
 		catch (JsonBindingException e)
 		{
-			return new AbstractWebApiResponse(response.code(), getHypermediaLinks(response));
+			return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
 		}
 	}
 
-	public AbstractWebApiResponse loadObjectByURL(String url) throws IOException
+	public AbstractWebApiResponse<T> loadObjectByURL(String url) throws IOException
 	{
 		final Response response = sendGetRequest(url);
 		try
 		{
-			return new AbstractWebApiResponse(deserializeToObject(genson, response), response.code(),
+			return new AbstractWebApiResponse<T>(deserializeToObject(genson, response.body().string()), response.code(),
 				getHypermediaLinks(response));
 		}
 		catch (JsonBindingException e)
 		{
-			return new AbstractWebApiResponse(response.code(), getHypermediaLinks(response));
+			return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
 		}
 	}
 
-	public AbstractWebApiResponse loadAllObjectsByUrl(String url) throws IOException
+	public AbstractWebApiResponse<T> loadAllObjectsByUrl(String url) throws IOException
 	{
 		final Response response = sendGetRequest(url);
 		Map<String, Map<String, String>> hypermediaLinks = getHypermediaLinks(response);
 		try
 
 		{
-			return new AbstractWebApiResponse(deserializeToObjectCollection(genson, response), response.code(),
-				hypermediaLinks);
+			return new AbstractWebApiResponse<T>(deserializeToObjectCollection(genson, response.body().string()),
+				response.code(), hypermediaLinks);
 		}
 		catch (JsonBindingException e)
 		{
-			return new AbstractWebApiResponse(response.code(), hypermediaLinks);
+			return new AbstractWebApiResponse<T>(response.code(), hypermediaLinks);
 		}
 	}
 
-	public AbstractWebApiResponse postObject(String url, T object) throws IOException
+	public AbstractWebApiResponse<T> postObject(String url, T object) throws IOException
 	{
 		final Response response = sendPostRequest(url, object);
-		return new AbstractWebApiResponse(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
 	}
 
-	public AbstractWebApiResponse putObject(T object, long objectId, String url) throws IOException
+	public AbstractWebApiResponse<T> putObject(T object, long objectId, String url) throws IOException
 	{
 		final Response response = sendPutRequest(object, objectId, url);
-		return new AbstractWebApiResponse(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
 	}
 
-	public AbstractWebApiResponse deleteObject(String url, long objectId) throws IOException
+	public AbstractWebApiResponse<T> deleteObject(String url, long objectId) throws IOException
 	{
 		final Response response = sendDeleteRequest(combineUrlAndId(url, objectId));
-		return new AbstractWebApiResponse(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
 	}
 
-	public AbstractWebApiResponse deleteObject(String url) throws IOException
+	public AbstractWebApiResponse<T> deleteObject(String url) throws IOException
 	{
 		final Response response = sendDeleteRequest(url);
-		return new AbstractWebApiResponse(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
 	}
 
-	public AbstractWebApiResponse deleteObjectByURL(String location) throws IOException
+	public AbstractWebApiResponse<T> deleteObjectByURL(String location) throws IOException
 	{
 		final Response response = sendDeleteRequestByURL(location);
-		return new AbstractWebApiResponse(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
 	}
 
-	public AbstractWebApiResponse getDispatcher() throws IOException
+	public AbstractWebApiResponse<T> getDispatcher() throws IOException
 	{
 		Response response = sendGetRequest(WebApiClient.DISPATCHER_URL);
-		return new AbstractWebApiResponse(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
 	}
 
 	private Map<String, Map<String, String>> getHypermediaLinks(Response response)
@@ -166,7 +171,43 @@ public abstract class AbstractClient<T extends AbstractModel>
 		return RequestBody.create(MediaType.parse("application/json"), studentTripJSON);
 	}
 
-	public abstract Collection<T> deserializeToObjectCollection(Genson genson, final Response response);
+	public abstract Collection<T> deserializeToObjectCollection(Genson genson, final String data) throws IOException;
 
-	public abstract Optional<T> deserializeToObject(Genson genson, final Response response);
+	public abstract Optional<T> deserializeToObject(Genson genson, final String data) throws IOException;
+
+	public static void main(String[] args)
+	{
+		AbstractClient<StudentTripView> studentTripViewAbstractClient = new WebApiClientStudentTrip();
+		String data = "{\"id\":1}";
+		StudentTripView deserialize = studentTripViewAbstractClient.genson.deserialize(data,
+			new GenericType<StudentTripView>()
+			{
+				@Override public Type getType()
+				{
+					return super.getType();
+				}
+			});
+		try
+		{
+			studentTripViewAbstractClient.deserializeToObjectCollection(studentTripViewAbstractClient.genson,
+				"[\n" + "    {\n" + "        \"city\": \"city\",\n" + "        \"country\": \"country\",\n"
+					+ "        \"end\": \"1960-02-09\",\n" + "        \"id\": 1,\n" + "        \"name\": \"Felix\",\n"
+					+ "        \"partnerUniversity\": \"partnerUni\",\n" + "        \"start\": \"1960-02-09\",\n"
+					+ "        \"studentIds\": []\n" + "    }\n" + "]");
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		try
+		{
+			Optional<StudentTripView> studentTripView = studentTripViewAbstractClient.deserializeToObject(
+				studentTripViewAbstractClient.genson, data);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		int i = 1;
+	}
 }

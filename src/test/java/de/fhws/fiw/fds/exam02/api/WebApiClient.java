@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-public class WebApiClient
+public class WebApiClient extends AbstractClient<StudentTripView>
 {
 	public static final String DISPATCHER_URL = "http://localhost:8080/exam02/api";
 
@@ -20,13 +20,26 @@ public class WebApiClient
 
 	private final Genson genson;
 
-	private final WebApiClientStudentTrip states;
+	private final WebApiClientStudentTrip studentTripClient;
+	private final WebApiClientStudent studentClient;
 
 	public WebApiClient()
 	{
 		this.client = new OkHttpClient();
 		this.genson = new Genson();
-		this.states = new WebApiClientStudentTrip(this.client, this.genson);
+		this.studentTripClient = new WebApiClientStudentTrip();
+		this.studentClient = new WebApiClientStudent();
+	}
+
+	@Override public Collection<StudentTripView> deserializeToObjectCollection(Genson genson, String data)
+		throws IOException
+	{
+		return null;
+	}
+
+	@Override public Optional<StudentTripView> deserializeToObject(Genson genson, String data) throws IOException
+	{
+		return Optional.empty();
 	}
 
 	public static RequestBody getStudentTripRequestBody(Genson genson, StudentTripView studentTripView)
@@ -51,9 +64,14 @@ public class WebApiClient
 		return Optional.ofNullable(genson.deserialize(data, StudentTripView.class));
 	}
 
-	public WebApiClientStudentTrip getStates()
+	public WebApiClientStudentTrip getStudentTripClient()
 	{
-		return states;
+		return studentTripClient;
+	}
+
+	public WebApiClientStudent getStudentClient()
+	{
+		return studentClient;
 	}
 
 	public static void main(String[] args)
@@ -71,14 +89,7 @@ public class WebApiClient
 
 			StudentTripView studentTripView = new StudentTripView(generatedString, 0L, LocalDate.parse("2022-05-06"),
 				LocalDate.parse("2022-05-06"), generatedString, generatedString, generatedString, null);
-			try
-			{
-				client.getStates().postStudentTrip("http://localhost:8080/exam02/api/StudentTrips", studentTripView);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+
 		}
 	}
 }
