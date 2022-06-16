@@ -15,7 +15,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-class TestStudentTripHypermedia
+class TestStudentHypermedia
 {
 
 	public StudentTripView getEmptyStudentTripView()
