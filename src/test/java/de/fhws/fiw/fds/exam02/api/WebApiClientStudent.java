@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
 
-public class WebApiClientStudent extends AbstractClient<Student>
+public class WebApiClientStudent extends AbstractClient<StudentView>
 {
 
 	public WebApiClientStudent()
@@ -21,9 +21,10 @@ public class WebApiClientStudent extends AbstractClient<Student>
 		super();
 	}
 
-	@Override public Collection<Student> deserializeToObjectCollection(Genson genson, String data) throws IOException
+	@Override public Collection<StudentView> deserializeToObjectCollection(Genson genson, String data)
+		throws IOException
 	{
-		return genson.deserialize(data, new GenericType<Collection<Student>>()
+		return genson.deserialize(data, new GenericType<Collection<StudentView>>()
 		{
 			@Override public Type getType()
 			{
@@ -32,9 +33,9 @@ public class WebApiClientStudent extends AbstractClient<Student>
 		});
 	}
 
-	@Override public Optional<Student> deserializeToObject(Genson genson, String data) throws IOException
+	@Override public Optional<StudentView> deserializeToObject(Genson genson, String data) throws IOException
 	{
-		return Optional.ofNullable(genson.deserialize(data, Student.class));
+		return Optional.ofNullable(genson.deserialize(data, StudentView.class));
 	}
 
 }

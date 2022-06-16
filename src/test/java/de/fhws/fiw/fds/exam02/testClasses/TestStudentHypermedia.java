@@ -3,7 +3,8 @@ package de.fhws.fiw.fds.exam02.testClasses;
 import com.owlike.genson.Genson;
 import de.fhws.fiw.fds.exam02.api.*;
 import de.fhws.fiw.fds.exam02.api.AbstractClient;
-import de.fhws.fiw.fds.exam02.models.Student;
+import de.fhws.fiw.fds.exam02.models.StudentView;
+import de.fhws.fiw.fds.exam02.models.StudentView;
 import junit.framework.TestFailure;
 import okhttp3.Response;
 import org.junit.Test;
@@ -20,73 +21,50 @@ import static org.junit.Assert.*;
 
 public class TestStudentHypermedia
 {
+	private final String studentURL = "http://localhost:8080/exam02/api/Students";
 
-	public Student getEmptyStudent()
+	public StudentView getEmptyStudent()
 	{
-		Set<Long> ids = new HashSet<>();
-
-		return null; //TODO;
+		return new StudentView("firstName", "lastName", "course", 4, 5120051, "email");
 	}
 
-	@Test public void testDispatcherLinks()
-	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		WebApiResponse response = null;
-		Map<String, Map<String, String>> links = response.getLinks();
-
-		Map<String, String> link_get = links.get("getAllStudentTrips");
-		assertNotNull(link_get);
-		assertFalse(link_get.isEmpty());
-		checkLinkAndType(link_get, "http://localhost:8080/exam02/api/StudentTrips", "application/json");
-
-		Map<String, String> link_post = links.get("createStudentTrip");
-		assertNotNull(link_post);
-		assertFalse(link_post.isEmpty());
-		checkLinkAndType(link_post, "http://localhost:8080/exam02/api/StudentTrips", "application/json");
-
-		Map<String, String> link_self = links.get("self");
-		assertNotNull(link_self);
-		assertFalse(link_self.isEmpty());
-		assertEquals("http://localhost:8080/exam02/api", link_self.get("link"));
-	}
-
-	public AbstractWebApiResponse<Student> getDispatcherState(AbstractClient<Student> client) throws IOException
+	public AbstractWebApiResponse<StudentView> getDispatcherState(AbstractClient<StudentView> client) throws IOException
 	{
 		return client.getDispatcher();
 	}
 
-	public AbstractWebApiResponse<Student> getGetAllStudenTripsState(AbstractClient<Student> client) throws IOException
-	{
-		String url = getDispatcherState(client).getLink("getAllStudentTrips");
-		return client.loadAllObjectsByUrl(url);
-	}
-
-	public AbstractWebApiResponse<Student> getCreateStudenTripState(AbstractClient<Student> client,
-		Student studentTripView) throws IOException
-	{
-		String url = getDispatcherState(client).getLink("createStudentTrip");
-		return client.postObject(url, studentTripView);
-	}
-
-	public AbstractWebApiResponse<Student> getGetSingleStudentTripState(AbstractClient<Student> client)
+	public AbstractWebApiResponse<StudentView> getGetAllStudentsState(AbstractClient<StudentView> client)
 		throws IOException
 	{
+		return client.loadAllObjectsByUrl(studentURL);
+	}
 
-		String postUrl = getDispatcherState(client).getLink("createStudentTrip");
-		AbstractWebApiResponse<Student> postResponse = client.postObject(postUrl, getEmptyStudent());
-		String getUrl = postResponse.getLink("getStudentTrip");
-		AbstractWebApiResponse<Student> returnValue = client.loadObjectByURL(getUrl);
-		client.deleteObject(returnValue.getLink("deleteStudentTrip"));
+	public AbstractWebApiResponse<StudentView> getGetSingleStudentState(AbstractClient<StudentView> client)
+		throws IOException
+	{
+		String postUrl = getDispatcherState(client).getLink("createStudent");
+		AbstractWebApiResponse<StudentView> postResponse = client.postObject(postUrl, getEmptyStudent());
+		String getUrl = postResponse.getLink("getStudent");
+		AbstractWebApiResponse<StudentView> returnValue = client.loadObjectByURL(getUrl);
+		client.deleteObject(returnValue.getLink("deleteStudent"));
 		return returnValue;
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaGetSingleStudentripLink()
+	@Test public void testGetAllStudentsHypermeidaGetSingleStudentripLink()
 	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		AbstractWebApiResponse<Student> response = null;
+		final AbstractClient<StudentView> client = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetSingleStudentState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
+		try
+		{
+			response = getGetAllStudentsState(client);
 		}
 		catch (IOException e)
 		{
@@ -94,19 +72,19 @@ public class TestStudentHypermedia
 		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
-		Map<String, String> link = links.get("getStudentTrip");
+		Map<String, String> link = links.get("getStudent");
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
-		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips/{id}", "application/json");
+		checkLinkAndType(link, "http://localhost:8080/exam02/api/Students/{id}", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByNameLink()
+	@Test public void testGetAllStudentsHypermeidaSearchByNameLink()
 	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		AbstractWebApiResponse<Student> response = null;
+		final AbstractClient<StudentView> client = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetAllStudentsState(client);
 		}
 		catch (IOException e)
 		{
@@ -114,19 +92,19 @@ public class TestStudentHypermedia
 		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
-		Map<String, String> link = links.get("searchStudentTripByName");
+		Map<String, String> link = links.get("searchStudentByName");
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
-		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?name=Name", "application/json");
+		checkLinkAndType(link, "http://localhost:8080/exam02/api/Students?name=Name", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByCityLink()
+	@Test public void testGetAllStudentsHypermeidaSearchByCityLink()
 	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		AbstractWebApiResponse<Student> response = null;
+		final AbstractClient<StudentView> client = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetAllStudentsState(client);
 		}
 		catch (IOException e)
 		{
@@ -134,19 +112,19 @@ public class TestStudentHypermedia
 		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
-		Map<String, String> link = links.get("searchStudentTripByCity");
+		Map<String, String> link = links.get("searchStudentByCity");
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
-		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?city=City", "application/json");
+		checkLinkAndType(link, "http://localhost:8080/exam02/api/Students?city=City", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByCountryLink()
+	@Test public void testGetAllStudentsHypermeidaSearchByCountryLink()
 	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		AbstractWebApiResponse<Student> response = null;
+		final AbstractClient<StudentView> client = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetAllStudentsState(client);
 		}
 		catch (IOException e)
 		{
@@ -155,19 +133,19 @@ public class TestStudentHypermedia
 		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
-		Map<String, String> link = links.get("searchStudentTripByCountry");
+		Map<String, String> link = links.get("searchStudentByCountry");
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
-		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?country=Country", "application/json");
+		checkLinkAndType(link, "http://localhost:8080/exam02/api/Students?country=Country", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByDateLink()
+	@Test public void testGetAllStudentsHypermeidaSearchByDateLink()
 	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		AbstractWebApiResponse<Student> response = null;
+		final AbstractClient<StudentView> client = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetAllStudentsState(client);
 		}
 		catch (IOException e)
 		{
@@ -175,20 +153,20 @@ public class TestStudentHypermedia
 		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
-		Map<String, String> link = links.get("searchStudentTripByDate");
+		Map<String, String> link = links.get("searchStudentByDate");
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
-		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?start=1900-01-22&end=2022-12-05",
+		checkLinkAndType(link, "http://localhost:8080/exam02/api/Students?start=1900-01-22&end=2022-12-05",
 			"application/json");
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaDelete()
+	@Test public void testGetSingleStudentsHypermeidaDelete()
 	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		AbstractWebApiResponse<Student> response = null;
+		final AbstractClient<StudentView> client = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentView> response = null;
 		try
 		{
-			response = getGetSingleStudentTripState(client);
+			response = getGetSingleStudentState(client);
 		}
 		catch (IOException e)
 		{
@@ -196,21 +174,21 @@ public class TestStudentHypermedia
 		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
-		Map<String, String> link = links.get("deleteStudentTrip");
+		Map<String, String> link = links.get("deleteStudent");
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
 		checkLinkAndType(link,
-			"http://localhost:8080/exam02/api/StudentTrips/" + response.getResponseData().stream().findFirst().get()
+			"http://localhost:8080/exam02/api/Students/" + response.getResponseData().stream().findFirst().get()
 				.getId(), "application/json");
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaPut()
+	@Test public void testGetSingleStudentsHypermeidaPut()
 	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		AbstractWebApiResponse<Student> response = null;
+		final AbstractClient<StudentView> client = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentView> response = null;
 		try
 		{
-			response = getGetSingleStudentTripState(client);
+			response = getGetSingleStudentState(client);
 		}
 		catch (IOException e)
 		{
@@ -218,21 +196,21 @@ public class TestStudentHypermedia
 		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
-		Map<String, String> link = links.get("updateStudentTrip");
+		Map<String, String> link = links.get("updateStudent");
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
 		checkLinkAndType(link,
-			"http://localhost:8080/exam02/api/StudentTrips/" + response.getResponseData().stream().findFirst().get()
+			"http://localhost:8080/exam02/api/Students/" + response.getResponseData().stream().findFirst().get()
 				.getId(), "application/json");
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaSelf()
+	@Test public void testGetSingleStudentsHypermeidaSelf()
 	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		AbstractWebApiResponse<Student> response = null;
+		final AbstractClient<StudentView> client = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentView> response = null;
 		try
 		{
-			response = getGetSingleStudentTripState(client);
+			response = getGetSingleStudentState(client);
 		}
 		catch (IOException e)
 		{
@@ -244,17 +222,17 @@ public class TestStudentHypermedia
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
 		assertEquals(
-			"http://localhost:8080/exam02/api/StudentTrips/" + response.getResponseData().stream().findFirst().get()
+			"http://localhost:8080/exam02/api/Students/" + response.getResponseData().stream().findFirst().get()
 				.getId(), link.get("link"));
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaGetAllStudentTrips()
+	@Test public void testGetSingleStudentsHypermeidaGetAllStudents()
 	{
-		final AbstractClient<Student> client = new WebApiClientStudent();
-		AbstractWebApiResponse<Student> response = null;
+		final AbstractClient<StudentView> client = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentView> response = null;
 		try
 		{
-			response = getGetSingleStudentTripState(client);
+			response = getGetSingleStudentState(client);
 		}
 		catch (IOException e)
 		{
@@ -262,10 +240,10 @@ public class TestStudentHypermedia
 		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
-		Map<String, String> link = links.get("getAllStudentTrips");
+		Map<String, String> link = links.get("getAllStudents");
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
-		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips", "application/json");
+		checkLinkAndType(link, "http://localhost:8080/exam02/api/Students", "application/json");
 	}
 
 	public void checkLinkAndType(Map<String, String> link_get, String link, String type)
