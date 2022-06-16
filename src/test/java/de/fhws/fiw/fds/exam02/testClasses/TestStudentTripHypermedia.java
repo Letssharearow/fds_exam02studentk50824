@@ -3,12 +3,15 @@ package de.fhws.fiw.fds.exam02.testClasses;
 import de.fhws.fiw.fds.exam02.api.WebApiClient;
 import de.fhws.fiw.fds.exam02.api.WebApiResponse;
 import de.fhws.fiw.fds.exam02.models.StudentTripView;
-import de.fhws.fiw.fds.exam02.models.StudentView;
+import junit.framework.TestFailure;
 import org.junit.Test;
+import org.junit.internal.runners.statements.Fail;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -23,10 +26,18 @@ public class TestStudentTripHypermedia
 			"city", "country", ids);
 	}
 
-	@Test public void testDispatcherLinks() throws IOException
+	@Test public void testDispatcherLinks()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = client.getStates().getDispatcher();
+		WebApiResponse response = null;
+		try
+		{
+			response = client.getStates().getDispatcher();
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link_get = links.get("getAllStudentTrips");
@@ -74,10 +85,18 @@ public class TestStudentTripHypermedia
 		return returnValue;
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaGetSingleStudentripLink() throws IOException
+	@Test public void testGetAllStudentTripsHypermeidaGetSingleStudentripLink()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = getGetAllStudenTripsState(client);
+		WebApiResponse response = null;
+		try
+		{
+			response = getGetAllStudenTripsState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link = links.get("getStudentTrip");
@@ -86,10 +105,18 @@ public class TestStudentTripHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips/{id}", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByNameLink() throws IOException
+	@Test public void testGetAllStudentTripsHypermeidaSearchByNameLink()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = getGetAllStudenTripsState(client);
+		WebApiResponse response = null;
+		try
+		{
+			response = getGetAllStudenTripsState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link = links.get("searchStudentTripByName");
@@ -98,10 +125,18 @@ public class TestStudentTripHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?name=Name", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByCityLink() throws IOException
+	@Test public void testGetAllStudentTripsHypermeidaSearchByCityLink()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = getGetAllStudenTripsState(client);
+		WebApiResponse response = null;
+		try
+		{
+			response = getGetAllStudenTripsState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link = links.get("searchStudentTripByCity");
@@ -110,10 +145,19 @@ public class TestStudentTripHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?city=City", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByCountryLink() throws IOException
+	@Test public void testGetAllStudentTripsHypermeidaSearchByCountryLink()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = getGetAllStudenTripsState(client);
+		WebApiResponse response = null;
+		try
+		{
+			response = getGetAllStudenTripsState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link = links.get("searchStudentTripByCountry");
@@ -122,10 +166,18 @@ public class TestStudentTripHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?country=Country", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByDateLink() throws IOException
+	@Test public void testGetAllStudentTripsHypermeidaSearchByDateLink()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = getGetAllStudenTripsState(client);
+		WebApiResponse response = null;
+		try
+		{
+			response = getGetAllStudenTripsState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link = links.get("searchStudentTripByDate");
@@ -135,10 +187,18 @@ public class TestStudentTripHypermedia
 			"application/json");
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaDelete() throws IOException
+	@Test public void testGetSingleStudentTripsHypermeidaDelete()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = getGetSingleStudentTripState(client);
+		WebApiResponse response = null;
+		try
+		{
+			response = getGetSingleStudentTripState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link = links.get("deleteStudentTrip");
@@ -149,10 +209,18 @@ public class TestStudentTripHypermedia
 				.getId(), "application/json");
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaPut() throws IOException
+	@Test public void testGetSingleStudentTripsHypermeidaPut()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = getGetSingleStudentTripState(client);
+		WebApiResponse response = null;
+		try
+		{
+			response = getGetSingleStudentTripState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link = links.get("updateStudentTrip");
@@ -163,10 +231,18 @@ public class TestStudentTripHypermedia
 				.getId(), "application/json");
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaSelf() throws IOException
+	@Test public void testGetSingleStudentTripsHypermeidaSelf()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = getGetSingleStudentTripState(client);
+		WebApiResponse response = null;
+		try
+		{
+			response = getGetSingleStudentTripState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link = links.get("self");
@@ -177,10 +253,18 @@ public class TestStudentTripHypermedia
 				.getId(), link.get("link"));
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaGetAllStudentTrips() throws IOException
+	@Test public void testGetSingleStudentTripsHypermeidaGetAllStudentTrips()
 	{
 		final WebApiClient client = new WebApiClient();
-		WebApiResponse response = getGetSingleStudentTripState(client);
+		WebApiResponse response = null;
+		try
+		{
+			response = getGetSingleStudentTripState(client);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
 		Map<String, Map<String, String>> links = response.getLinks();
 
 		Map<String, String> link = links.get("getAllStudentTrips");
