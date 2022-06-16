@@ -2,15 +2,10 @@ package de.fhws.fiw.fds.exam02.api;
 
 import com.owlike.genson.GenericType;
 import com.owlike.genson.Genson;
-import com.owlike.genson.JsonBindingException;
 import de.fhws.fiw.fds.exam02.models.StudentTripView;
 import okhttp3.*;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -25,13 +20,13 @@ public class WebApiClient
 
 	private final Genson genson;
 
-	private final WebApiClientStates states;
+	private final WebApiClientStudentTrip states;
 
 	public WebApiClient()
 	{
 		this.client = new OkHttpClient();
 		this.genson = new Genson();
-		this.states = new WebApiClientStates(this.client, this.genson);
+		this.states = new WebApiClientStudentTrip(this.client, this.genson);
 	}
 
 	public static RequestBody getStudentTripRequestBody(Genson genson, StudentTripView studentTripView)
@@ -56,7 +51,7 @@ public class WebApiClient
 		return Optional.ofNullable(genson.deserialize(data, StudentTripView.class));
 	}
 
-	public WebApiClientStates getStates()
+	public WebApiClientStudentTrip getStates()
 	{
 		return states;
 	}
