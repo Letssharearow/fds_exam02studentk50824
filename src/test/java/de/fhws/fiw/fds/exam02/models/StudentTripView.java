@@ -2,10 +2,12 @@ package de.fhws.fiw.fds.exam02.models;
 
 import com.owlike.genson.annotation.JsonConverter;
 
+import de.fhws.fiw.fds.sutton.server.api.converter.JsonServerLinkConverter;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import de.fhws.fiw.fds.sutton.utils.JsonDateTimeConverter;
 import de.fhws.fiw.fds.sutton.utils.XmlDateTimeConverter;
 
+import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,7 +27,7 @@ import java.util.Set;
 	private String partnerUniversity;
 	private String city;
 	private String country;
-
+	private Link studentsLink;
 	private Set<Long> studentIds;
 
 	public StudentTripView(String name, long id, LocalDate start, LocalDate end, String partnerUniversity, String city,
@@ -43,6 +45,21 @@ import java.util.Set;
 
 	public StudentTripView()
 	{
+	}
+
+	@JsonConverter(JsonServerLinkConverter.class) public Link getStudentsLink()
+	{
+		return studentsLink;
+	}
+
+	@JsonConverter(JsonServerLinkConverter.class) public void setStudentsLink(Link studentsLink)
+	{
+		this.studentsLink = studentsLink;
+	}
+
+	public Set<Long> getStudentIds()
+	{
+		return studentIds;
 	}
 
 	@Override public long getId()
