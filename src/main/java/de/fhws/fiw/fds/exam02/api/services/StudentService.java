@@ -1,6 +1,6 @@
 package de.fhws.fiw.fds.exam02.api.services;
 
-import de.fhws.fiw.fds.exam02.api.states.QueryAllStudents;
+import de.fhws.fiw.fds.exam02.api.Query.QueryAllStudents;
 import de.fhws.fiw.fds.exam02.api.states.delete.DeleteSingleStudent;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudents;
 import de.fhws.fiw.fds.exam02.api.states.get.GetSingleStudent;
@@ -15,9 +15,10 @@ import javax.ws.rs.core.Response;
 
 @Path("Students") public class StudentService extends AbstractService
 {
-	@GET @Produces({ MediaType.APPLICATION_JSON }) public Response getAllStudents()
+	@GET @Produces({ MediaType.APPLICATION_JSON }) public Response getAllStudents(
+		@DefaultValue("1") @QueryParam("page") final int pageNumber)
 	{
-		return new GetAllStudents.Builder().setQuery(new QueryAllStudents()).setUriInfo(this.uriInfo)
+		return new GetAllStudents.Builder().setQuery(new QueryAllStudents(pageNumber)).setUriInfo(this.uriInfo)
 			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
 			.execute();
 	}
