@@ -25,26 +25,31 @@ import de.fhws.fiw.fds.suttondemo.models.Person;
 
 public class PutSinglePerson extends AbstractPutState<Person>
 {
-	public PutSinglePerson( final Builder builder )
+	public PutSinglePerson(final Builder builder)
 	{
-		super( builder );
+		super(builder);
 	}
 
-	@Override protected SingleModelResult<Person> loadModel( )
+	@Override protected SingleModelResult<Person> loadModel()
 	{
-		return DaoFactory.getInstance( ).getPersonDao( ).readById( this.modelToUpdate.getId( ) );
+		return DaoFactory.getInstance().getPersonDao().readById(this.modelToUpdate.getId());
 	}
 
-	@Override protected NoContentResult updateModel( )
+	@Override protected NoContentResult updateModel()
 	{
-		return DaoFactory.getInstance( ).getPersonDao( ).update( this.modelToUpdate );
+		return DaoFactory.getInstance().getPersonDao().update(this.modelToUpdate);
+	}
+
+	@Override protected void defineTransitionLinks()
+	{
+
 	}
 
 	public static class Builder extends AbstractPutStateBuilder<Person>
 	{
-		@Override public AbstractState build( )
+		@Override public AbstractState build()
 		{
-			return new PutSinglePerson( this );
+			return new PutSinglePerson(this);
 		}
 	}
 }

@@ -16,8 +16,8 @@
 
 package de.fhws.fiw.fds.exam02.api.states.post;
 
-import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripRelTypes;
-import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripUri;
+import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;

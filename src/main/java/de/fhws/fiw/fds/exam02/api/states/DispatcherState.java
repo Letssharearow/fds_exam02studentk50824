@@ -1,7 +1,7 @@
 package de.fhws.fiw.fds.exam02.api.states;
 
-import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripRelTypes;
-import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripUri;
+import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetDispatcherState;
 

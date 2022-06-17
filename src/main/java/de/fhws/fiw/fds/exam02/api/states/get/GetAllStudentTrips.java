@@ -16,13 +16,11 @@
 
 package de.fhws.fiw.fds.exam02.api.states.get;
 
-import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripRelTypes;
-import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripUri;
-import de.fhws.fiw.fds.exam02.database.DaoFactory;
+import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetCollectionState;
-import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;

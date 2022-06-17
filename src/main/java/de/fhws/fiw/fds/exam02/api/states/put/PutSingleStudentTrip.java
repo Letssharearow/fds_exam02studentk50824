@@ -16,12 +16,16 @@
 
 package de.fhws.fiw.fds.exam02.api.states.put;
 
+import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.put.AbstractPutState;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
+
+import javax.ws.rs.core.MediaType;
 
 public class PutSingleStudentTrip extends AbstractPutState<StudentTrip>
 {
@@ -38,6 +42,12 @@ public class PutSingleStudentTrip extends AbstractPutState<StudentTrip>
 	@Override protected NoContentResult updateModel()
 	{
 		return DaoFactory.getInstance().getStudentTripDao().update(this.modelToUpdate);
+	}
+
+	@Override protected void defineTransitionLinks()
+	{
+		addLink(StudentTripUri.REL_PATH_ID.replaceAll("\\{id}", this.loadModel().getResult().getId() + ""),
+			StudentTripRelTypes.GET_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
 	}
 
 	public static class Builder extends AbstractPutStateBuilder<StudentTrip>

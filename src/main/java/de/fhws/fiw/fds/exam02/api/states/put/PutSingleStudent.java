@@ -16,12 +16,16 @@
 
 package de.fhws.fiw.fds.exam02.api.states.put;
 
+import de.fhws.fiw.fds.exam02.Strings.StudentStrings.StudentRelTypes;
+import de.fhws.fiw.fds.exam02.Strings.StudentStrings.StudentUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.Student;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.put.AbstractPutState;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
+
+import javax.ws.rs.core.MediaType;
 
 public class PutSingleStudent extends AbstractPutState<Student>
 {
@@ -38,6 +42,12 @@ public class PutSingleStudent extends AbstractPutState<Student>
 	@Override protected NoContentResult updateModel()
 	{
 		return DaoFactory.getInstance().getStudentDao().update(this.modelToUpdate);
+	}
+
+	@Override protected void defineTransitionLinks()
+	{
+		addLink(StudentUri.REL_PATH_ID.replaceAll("\\{id}", this.loadModel().getResult().getId() + ""),
+			StudentRelTypes.GET_SINGLE_STUDENT, MediaType.APPLICATION_JSON);
 	}
 
 	public static class Builder extends AbstractPutStateBuilder<Student>

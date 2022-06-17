@@ -120,7 +120,8 @@ public abstract class AbstractPutState<T extends AbstractModel> extends Abstract
 	 * This method is used to define all transition links based on the idea of a REST system as
 	 * a finite state machine.
 	 */
-	//	protected abstract void defineTransitionLinks( );
+	protected abstract void defineTransitionLinks();
+
 	protected void defineSelfLink()
 	{
 		final UriBuilder builder = this.uriInfo.getAbsolutePathBuilder();
