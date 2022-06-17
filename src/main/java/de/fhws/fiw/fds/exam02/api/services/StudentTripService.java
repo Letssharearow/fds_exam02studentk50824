@@ -16,8 +16,8 @@
 
 package de.fhws.fiw.fds.exam02.api.services;
 
-import de.fhws.fiw.fds.exam02.api.states.QueryPageParameter;
-import de.fhws.fiw.fds.exam02.api.states.QueryStudent;
+import de.fhws.fiw.fds.exam02.api.Query.QueryPageParameter;
+import de.fhws.fiw.fds.exam02.api.Query.QueryStudent;
 import de.fhws.fiw.fds.exam02.api.states.delete.DeleteSingleStudentTrip;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudentTrips;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudents;

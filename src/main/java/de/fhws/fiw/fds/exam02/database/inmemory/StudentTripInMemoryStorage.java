@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentTrip>
 	implements StudentTripDao, OrderData<StudentTrip>
@@ -43,55 +44,77 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 
 	@Override public CollectionModelResult<StudentTrip> order(CollectionModelResult<StudentTrip> result)
 	{
-		return result; //TODO
+		ArrayList<StudentTrip> studentTripList = new ArrayList<>(result.getResult());
+		studentTripList.sort(Comparator.comparing(StudentTrip::getStart));
+		return new CollectionModelResult<>(studentTripList);
 	}
 
 	//TODO: remove when done
 	private void populateData()
 	{
-		LocalDate date = LocalDate.of(1960, 2, 9);
+		LocalDate start = LocalDate.of(2022, 2, 15);
+		LocalDate end = LocalDate.of(2022, 3, 1);
 		HashSet<Long> set = new HashSet<>();
-		//set.add(1L);
-		StudentTrip model = new StudentTrip("Felix", date, date, "partnerUni", "city", "country", set);
+		set.add(1L);
+		StudentTrip model = new StudentTrip("Felix", start, end, "partnerUni", "city", "country", set);
+		createWithoutCheck(model);
+	}
+
+	public void createWithoutCheck(StudentTrip model)
+	{
 		model.setId(nextId());
 		this.storage.put(model.getId(), model);
-
 	}
 
 	@Override public CollectionModelResult<StudentTrip> readByNameCityCountryDate(String name, String city,
 		String country, String start, String end)
 	{
-		return readByPredicate(
+		CollectionModelResult<StudentTrip> result = readByPredicate(
 			studentTrip -> matchString(studentTrip.getName(), name) && matchString(studentTrip.getCity(), city)
 				&& matchString(studentTrip.getCountry(), country) && matchTimeperiod(studentTrip, start, end));
+		return order(result);
 	}
 
 	@Override public NoContentResult create(final StudentTrip model)
 	{
-		CheckForInvalidStudentIds(model);
+		if (!isValidStudentTrip(model))
+		{
+			throw new WebApplicationException(Response.Status.BAD_REQUEST);
+		}
 		model.setId(nextId());
 		this.storage.put(model.getId(), model);
 		return new NoContentResult();
 	}
 
-	@Override public void CheckForInvalidStudentIds(StudentTrip model)
+	@Override public boolean isValidStudentTrip(final StudentTrip model)
 	{
+		return isValidDate(model) && isValidStudentIds(model);
+	}
+
+	private static boolean isValidDate(StudentTrip model)
+	{
+		return model.getStart().isAfter(model.getEnd());
+	}
+
+	private boolean isValidStudentIds(StudentTrip model)
+	{
+		AtomicBoolean returnValue = new AtomicBoolean(true);
 		Set<Long> studentIds = model.getStudentIds();
-		if (studentIds == null || (studentIds.size() == 1 && studentIds.contains(0L)))
-		{
-			return;
-		}
+		studentIds.remove(0L);
 		StudentDao studentDao = DaoFactory.getInstance().getStudentDao();
 		studentIds.forEach(studentId -> {
-			if (studentDao.readById(studentId).isEmpty())
+			if (returnValue.get() && studentDao.readById(studentId).isEmpty())
 			{
-				throw new WebApplicationException(Response.Status.BAD_REQUEST);
+				returnValue.set(false);
 			}
 		});
+		return returnValue.get();
 	}
 
 	@Override public boolean matchString(String variable, String value)
 	{
+		variable = variable.toLowerCase(Locale.ROOT);
+		value = value.toLowerCase(Locale.ROOT);
 		return StringUtils.isEmpty(value) || variable.startsWith(value) || variable.contains(value)
 			|| variable.equalsIgnoreCase(value);
 	}
@@ -103,30 +126,31 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 		LocalDate tripEnd = studentTrip.getEnd();
 		LocalDate tripStart = studentTrip.getStart();
 
+		boolean startExists = !start.isEmpty() && optionalLocalStart.isPresent();
+		boolean endExists = !end.isEmpty() && optionalLocalEnd.isPresent();
+
 		//returns true if given time period is anywhere inside the start and end of the studenttrip, or no valid date is given
-		if (start.isEmpty())
+		if (!startExists)
 		{
-			if (end.isEmpty())
+			if (!endExists)
 			{
 				return true;
 			}
 			else
 			{
-				return !optionalLocalEnd.isPresent() || (studentTrip.getEnd().isAfter(optionalLocalEnd.get()));
+				return (tripEnd.isAfter(optionalLocalEnd.get().minusDays(1)) && tripStart.isBefore(
+					optionalLocalEnd.get().plusDays(1)));
 			}
 		}
 		else
 		{
-			if (end.isEmpty())
+			if (!endExists)
 			{
-				return !optionalLocalStart.isPresent() || (tripEnd.isBefore(optionalLocalStart.get()));
+				return (tripEnd.isAfter(optionalLocalStart.get().minusDays(1)) && tripStart.isBefore(
+					optionalLocalStart.get().plusDays(1)));
 			}
 			else
 			{
-				if (!optionalLocalStart.isPresent() || !optionalLocalEnd.isPresent())
-				{
-					return true;
-				}
 				LocalDate startSearch = optionalLocalStart.get();
 				LocalDate endSearch = optionalLocalEnd.get();
 				return (tripStart.isBefore(startSearch.plusDays(1)) && tripEnd.isAfter(startSearch.minusDays(1)) || (
@@ -151,16 +175,6 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 			System.out.println(e.getMessage());
 		}
 		return optionalLocalDate;
-	}
-
-	public static void main(String[] args)
-	{
-		LocalDate date = LocalDate.of(1960, 2, 9);
-		HashSet<Long> set = new HashSet<>();
-		set.add(1L);
-		StudentTrip studentTrip = new StudentTrip("Felix", date, date, "partnerUni", "city", "country", set);
-		StudentTripInMemoryStorage studentTripInMemoryStorage = new StudentTripInMemoryStorage();
-		System.out.println(studentTripInMemoryStorage.matchTimeperiod(studentTrip, "dasdfa", ""));
 	}
 
 }
