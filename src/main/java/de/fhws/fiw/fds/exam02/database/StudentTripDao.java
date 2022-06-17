@@ -25,7 +25,7 @@ public interface StudentTripDao extends IDatabaseAccessObject<StudentTrip>
 	CollectionModelResult<StudentTrip> readByNameCityCountryDate(String name, String city, String country, String start,
 		String end);
 
-	void CheckForInvalidStudentIds(StudentTrip model);
+	boolean isValidStudentTrip(StudentTrip model);
 
 	boolean matchString(String variable, String value);
 

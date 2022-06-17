@@ -14,19 +14,14 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.exam02.database;
+package de.fhws.fiw.fds.exam02.Strings.StudentStrings;
 
-import de.fhws.fiw.fds.exam02.models.Student;
-import de.fhws.fiw.fds.sutton.server.database.IDatabaseAccessObject;
-import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
+import de.fhws.fiw.fds.suttondemo.Start;
 
-import java.util.Set;
-
-public interface StudentDao extends IDatabaseAccessObject<Student>
+public interface StudentUri
 {
-	CollectionModelResult<Student> readStudentsById(Set<Long> id);
 
-	CollectionModelResult<Student> loadStudents();
-
-	void removeStudentFromTrips(long id);
+	String PATH_ELEMENT = "Students";
+	String REL_PATH = Start.CONTEXT_PATH + "/api/" + PATH_ELEMENT;
+	String REL_PATH_ID = REL_PATH + "/{id}";
 }

@@ -1,5 +1,7 @@
-package de.fhws.fiw.fds.exam02.api.states;
+package de.fhws.fiw.fds.exam02.api.Query;
 
+import de.fhws.fiw.fds.exam02.Strings.StudentStrings.StudentUri;
+import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.queries.AbstractQuery;
@@ -22,7 +24,7 @@ public class QueryPageParameter extends AbstractQuery<StudentTrip>
 		this.country = country;
 		this.start = start;
 		this.end = end;
-		setPagingBehavior(new PagingPageParameter(pageNumber));
+		setPagingBehavior(new PagingPageParameter(pageNumber, StudentTripUri.PATH_ELEMENT));
 	}
 
 	@Override protected CollectionModelResult<StudentTrip> doExecuteQuery() throws DatabaseException

@@ -1,5 +1,6 @@
-package de.fhws.fiw.fds.exam02.api.states;
+package de.fhws.fiw.fds.exam02.api.Query;
 
+import de.fhws.fiw.fds.exam02.Strings.StudentStrings.StudentUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.Student;
 import de.fhws.fiw.fds.sutton.server.api.queries.AbstractQuery;
@@ -18,7 +19,7 @@ public class QueryStudent extends AbstractQuery<Student>
 	{
 		super();
 		this.studentsInStudentTrip = studentsInStudentTrip;
-		setPagingBehavior(new PagingPageParameter(pageNumber));
+		setPagingBehavior(new PagingPageParameter(pageNumber, StudentUri.PATH_ELEMENT));
 	}
 
 	@Override protected CollectionModelResult<Student> doExecuteQuery() throws DatabaseException

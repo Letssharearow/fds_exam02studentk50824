@@ -16,11 +16,14 @@
 
 package de.fhws.fiw.fds.exam02.api.states.get;
 
+import de.fhws.fiw.fds.exam02.Strings.StudentStrings.StudentRelTypes;
+import de.fhws.fiw.fds.exam02.Strings.StudentStrings.StudentUri;
 import de.fhws.fiw.fds.exam02.models.Student;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetCollectionState;
 
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 public class GetAllStudents extends AbstractGetCollectionState<Student>
@@ -40,6 +43,7 @@ public class GetAllStudents extends AbstractGetCollectionState<Student>
 
 	@Override protected void defineTransitionLinks()
 	{
+		addLink(StudentUri.REL_PATH_ID, StudentRelTypes.GET_SINGLE_STUDENT, MediaType.APPLICATION_JSON);
 	}
 
 	@Override protected void authorizeRequest()

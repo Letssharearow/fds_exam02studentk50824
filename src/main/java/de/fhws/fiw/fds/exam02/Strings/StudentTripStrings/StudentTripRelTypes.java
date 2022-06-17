@@ -1,6 +1,4 @@
-package de.fhws.fiw.fds.exam02.StudentTrips;
-
-import de.fhws.fiw.fds.suttondemo.Start;
+package de.fhws.fiw.fds.exam02.Strings.StudentTripStrings;
 
 public interface StudentTripRelTypes
 {

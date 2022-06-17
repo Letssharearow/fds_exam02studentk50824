@@ -1,12 +1,9 @@
-package de.fhws.fiw.fds.exam02.api.states;
+package de.fhws.fiw.fds.exam02.api.Query;
 
-import de.fhws.fiw.fds.exam02.StudentTrips.StudentTripUri;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.queries.PagingBehavior;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
-import org.glassfish.jersey.uri.UriComponent;
 
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
@@ -17,10 +14,12 @@ public class PagingPageParameter extends PagingBehavior<StudentTrip>
 {
 	private static final int DEFAULT_PAGE_SIZE = 10;
 	private int pageNumber = 1;
+	private String path;
 
-	public PagingPageParameter(int pageNumber)
+	public PagingPageParameter(int pageNumber, String path)
 	{
 		this.pageNumber = pageNumber;
+		this.path = path;
 	}
 
 	@Override protected List<StudentTrip> page(Collection<StudentTrip> result)
@@ -43,16 +42,16 @@ public class PagingPageParameter extends PagingBehavior<StudentTrip>
 	@Override protected URI getSelfUri(UriInfo uriInfo)
 	{
 		URI page = uriInfo.getRequestUriBuilder().queryParam("page", pageNumber).build();
-		return uriInfo.getRequestUriBuilder().queryParam("page", pageNumber).build();
+		return uriInfo.getBaseUriBuilder().path(path).queryParam("page", pageNumber).build();
 	}
 
 	@Override protected URI getPrevUri(UriInfo uriInfo)
 	{
-		return uriInfo.getRequestUriBuilder().queryParam("page", pageNumber - 1).build();
+		return uriInfo.getBaseUriBuilder().path(path).queryParam("page", pageNumber - 1).build();
 	}
 
 	@Override protected URI getNextUri(UriInfo uriInfo, CollectionModelResult<?> result)
 	{
-		return uriInfo.getRequestUriBuilder().queryParam("page", pageNumber + 1).build();
+		return uriInfo.getBaseUriBuilder().path(path).queryParam("page", pageNumber + 1).build();
 	}
 }
