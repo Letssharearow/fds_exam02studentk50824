@@ -21,6 +21,12 @@ public class WebApiClientStudent extends AbstractClient<StudentView>
 		super();
 	}
 
+	@Override void setStudenTripStudentsLink(Response response, Map<String, Map<String, String>> bigMap, String json)
+		throws IOException
+	{
+
+	}
+
 	@Override public Collection<StudentView> deserializeToObjectCollection(Genson genson, String data)
 		throws IOException
 	{

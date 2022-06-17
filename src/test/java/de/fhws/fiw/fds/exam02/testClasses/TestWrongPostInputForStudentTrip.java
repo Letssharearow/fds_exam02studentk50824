@@ -25,7 +25,7 @@ public class TestWrongPostInputForStudentTrip
 	{
 		Set<Long> ids = new HashSet<>();
 
-		return new StudentTripView("template", 0L, LocalDate.of(1960, 2, 9), LocalDate.of(1861, 3, 10), "partnerUni",
+		return new StudentTripView("template", 0L, LocalDate.of(1960, 2, 9), LocalDate.of(2022, 3, 10), "partnerUni",
 			"city", "country", ids);
 	}
 
@@ -60,7 +60,6 @@ public class TestWrongPostInputForStudentTrip
 			AbstractWebApiResponse<StudentTripView> postResponse = client.postObject(
 				dispatcherState.getLink("createStudentTrip"), emptyStudentTripView);
 			assertEquals(400, postResponse.getLastStatusCode());
-
 		}
 		catch (IOException e)
 		{
@@ -84,6 +83,39 @@ public class TestWrongPostInputForStudentTrip
 			AbstractWebApiResponse<StudentTripView> dispatcherState = getDispatcherState(clientTrip);
 			AbstractWebApiResponse<StudentTripView> postResponse = clientTrip.postObject(
 				dispatcherState.getLink("createStudentTrip"), emptyStudentTripView);
+			assertEquals(400, postResponse.getLastStatusCode());
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
+
+	}
+
+	public void deleteStudentTrip(WebApiClientStudentTrip client, AbstractWebApiResponse<StudentTripView> response)
+		throws IOException
+	{
+		AbstractWebApiResponse<StudentTripView> getStudentTrip = client.loadObjectByURL(
+			response.getLink("getStudentTrip"));
+		client.deleteObject(getStudentTrip.getLink("deleteStudentTrip"));
+	}
+
+	@Test public void testDateStartIsAfterEnd()
+	{
+		WebApiClientStudentTrip clientTrip = new WebApiClientStudentTrip();
+		StudentTripView emptyStudentTripView = getEmptyStudentTripView();
+		emptyStudentTripView.setEnd(LocalDate.of(2022, 2, 15));
+		emptyStudentTripView.setStart(LocalDate.of(2022, 2, 15));
+		try
+		{
+			AbstractWebApiResponse<StudentTripView> dispatcherState = getDispatcherState(clientTrip);
+			AbstractWebApiResponse<StudentTripView> postResponse = clientTrip.postObject(
+				dispatcherState.getLink("createStudentTrip"), emptyStudentTripView);
+			assertEquals(201, postResponse.getLastStatusCode());
+			deleteStudentTrip(clientTrip, postResponse);
+			emptyStudentTripView.setStart(LocalDate.of(2022, 2, 16));
+			emptyStudentTripView.setEnd(LocalDate.of(2022, 2, 15));
+			postResponse = clientTrip.postObject(dispatcherState.getLink("createStudentTrip"), emptyStudentTripView);
 			assertEquals(400, postResponse.getLastStatusCode());
 		}
 		catch (IOException e)

@@ -2,8 +2,11 @@ package de.fhws.fiw.fds.exam02.testClasses;
 
 import de.fhws.fiw.fds.exam02.api.AbstractClient;
 import de.fhws.fiw.fds.exam02.api.AbstractWebApiResponse;
+import de.fhws.fiw.fds.exam02.api.WebApiClientStudent;
 import de.fhws.fiw.fds.exam02.api.WebApiClientStudentTrip;
 import de.fhws.fiw.fds.exam02.models.StudentTripView;
+import de.fhws.fiw.fds.exam02.models.StudentView;
+import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,12 +19,13 @@ import static org.junit.Assert.*;
 
 public class TestStudentTripHypermedia
 {
+	private final String studentURL = "http://localhost:8080/exam02/api/Students";
 
 	public StudentTripView getEmptyStudentTripView()
 	{
 		Set<Long> ids = new HashSet<>();
 
-		return new StudentTripView("template", 0L, LocalDate.of(1960, 2, 9), LocalDate.of(1861, 3, 10), "partnerUni",
+		return new StudentTripView("template", 0L, LocalDate.of(1960, 2, 9), LocalDate.of(2022, 3, 10), "partnerUni",
 			"city", "country", ids);
 	}
 
@@ -273,6 +277,59 @@ public class TestStudentTripHypermedia
 		assertNotNull(link);
 		assertFalse(link.isEmpty());
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips", "application/json");
+	}
+
+	@Test public void testLinkforStudentsOfStudenTripHypermedia()
+	{
+		final WebApiClientStudentTrip webApiClientStudentTrip = new WebApiClientStudentTrip();
+		WebApiClientStudent webApiClientStudent = new WebApiClientStudent();
+		AbstractWebApiResponse<StudentTripView> response = null;
+
+		StudentView studentView = new StudentView("name", "lastName", "course", 4, 5120051, "email");
+		StudentTripView studentTripView = getEmptyStudentTripView();
+		try
+		{
+			AbstractWebApiResponse<StudentView> studentPostResponse = webApiClientStudent.postObject(studentURL,
+				studentView);
+			long studentId = webApiClientStudent.loadObjectByURL(studentPostResponse.getLink("getStudent"))
+				.getResponseData().stream().findFirst().get().getId();
+			studentTripView.getStudentIds().add(studentId);
+			response = getDispatcherState(webApiClientStudentTrip);
+			AbstractWebApiResponse<StudentTripView> studentTripPostResponse = webApiClientStudentTrip.postObject(
+				response.getLink("createStudentTrip"), studentTripView);
+
+			AbstractWebApiResponse<StudentTripView> studentTripGetResponse = webApiClientStudentTrip.loadObjectByURL(
+				studentTripPostResponse.getLink("getStudentTrip"));
+
+			Map<String, Map<String, String>> links = studentTripGetResponse.getLinks();
+			Map<String, String> link = links.get("getStudents");
+			assertNotNull(link);
+			assertFalse(link.isEmpty());
+			checkLinkAndType(link, studentTripPostResponse.getLink("self") + "/Students", "application/json");
+
+			deleteStudentView(webApiClientStudent, studentPostResponse);
+			deleteStudentTripView(webApiClientStudentTrip, studentTripPostResponse);
+		}
+		catch (IOException e)
+		{
+			fail(e.getMessage());
+		}
+
+	}
+
+	private void deleteStudentView(AbstractClient<StudentView> client, AbstractWebApiResponse<StudentView> postResponse)
+		throws IOException
+	{
+		AbstractWebApiResponse<StudentView> getStudent = client.loadObjectByURL(postResponse.getLink("getStudent"));
+		client.deleteObject(getStudent.getLink("deleteStudent"));
+	}
+
+	private void deleteStudentTripView(AbstractClient<StudentTripView> client,
+		AbstractWebApiResponse<StudentTripView> postResponse) throws IOException
+	{
+		AbstractWebApiResponse<StudentTripView> getStudent = client.loadObjectByURL(
+			postResponse.getLink("getStudentTrip"));
+		client.deleteObject(getStudent.getLink("deleteStudentTrip"));
 	}
 
 	public void checkLinkAndType(Map<String, String> link_get, String link, String type)

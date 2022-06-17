@@ -7,10 +7,7 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 public class WebApiClient extends AbstractClient<StudentTripView>
 {
@@ -29,6 +26,13 @@ public class WebApiClient extends AbstractClient<StudentTripView>
 		this.genson = new Genson();
 		this.studentTripClient = new WebApiClientStudentTrip();
 		this.studentClient = new WebApiClientStudent();
+	}
+
+	//TODO remove
+	@Override void setStudenTripStudentsLink(Response response, Map<String, Map<String, String>> bigMap, String json)
+		throws IOException
+	{
+
 	}
 
 	@Override public Collection<StudentTripView> deserializeToObjectCollection(Genson genson, String data)

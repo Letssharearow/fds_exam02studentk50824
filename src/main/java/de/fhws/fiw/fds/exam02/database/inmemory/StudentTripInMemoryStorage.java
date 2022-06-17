@@ -93,7 +93,9 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 
 	private static boolean isValidDate(StudentTrip model)
 	{
-		return model.getStart().isAfter(model.getEnd());
+		LocalDate start = model.getStart();
+		LocalDate end = model.getEnd();
+		return start == null || end == null || !start.isAfter(end);
 	}
 
 	private boolean isValidStudentIds(StudentTrip model)

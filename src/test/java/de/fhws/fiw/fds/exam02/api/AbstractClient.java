@@ -20,7 +20,7 @@ public abstract class AbstractClient<T extends AbstractModel>
 
 	private final OkHttpClient client;
 
-	private final Genson genson;
+	protected final Genson genson;
 
 	public AbstractClient()
 	{
@@ -31,40 +31,46 @@ public abstract class AbstractClient<T extends AbstractModel>
 	public AbstractWebApiResponse<T> loadObjectByURLAndId(String url, long id) throws IOException
 	{
 		final Response response = sendGetRequest(combineUrlAndId(url, id));
+		assert response.body() != null;
+		String json = response.body().string();
 		try
 		{
-			return new AbstractWebApiResponse<T>(deserializeToObject(genson, response.body().string()), response.code(),
-				getHypermediaLinks(response));
+			return new AbstractWebApiResponse<T>(deserializeToObject(genson, json), response.code(),
+				getAllHypermediaLinks(response, json));
 		}
 		catch (JsonBindingException e)
 		{
-			return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
+			return new AbstractWebApiResponse<T>(response.code(), getAllHypermediaLinks(response, json));
 		}
 	}
 
 	public AbstractWebApiResponse<T> loadObjectByURL(String url) throws IOException
 	{
 		final Response response = sendGetRequest(url);
+		assert response.body() != null;
+		String json = response.body().string();
 		try
 		{
-			return new AbstractWebApiResponse<T>(deserializeToObject(genson, response.body().string()), response.code(),
-				getHypermediaLinks(response));
+			return new AbstractWebApiResponse<T>(deserializeToObject(genson, json), response.code(),
+				getAllHypermediaLinks(response, json));
 		}
 		catch (JsonBindingException e)
 		{
-			return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
+			return new AbstractWebApiResponse<T>(response.code(), getAllHypermediaLinks(response, json));
 		}
 	}
 
 	public AbstractWebApiResponse<T> loadAllObjectsByUrl(String url) throws IOException
 	{
 		final Response response = sendGetRequest(url);
-		Map<String, Map<String, String>> hypermediaLinks = getHypermediaLinks(response);
+		assert response.body() != null;
+		String json = response.body().string();
+		Map<String, Map<String, String>> hypermediaLinks = getHttpHypermediaLinks(response);
 		try
 
 		{
-			return new AbstractWebApiResponse<T>(deserializeToObjectCollection(genson, response.body().string()),
-				response.code(), hypermediaLinks);
+			return new AbstractWebApiResponse<T>(deserializeToObjectCollection(genson, json), response.code(),
+				hypermediaLinks);
 		}
 		catch (JsonBindingException e)
 		{
@@ -75,51 +81,70 @@ public abstract class AbstractClient<T extends AbstractModel>
 	public AbstractWebApiResponse<T> postObject(String url, T object) throws IOException
 	{
 		final Response response = sendPostRequest(url, object);
-		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHttpHypermediaLinks(response));
 	}
 
 	public AbstractWebApiResponse<T> putObject(T object, long objectId, String url) throws IOException
 	{
 		final Response response = sendPutRequest(object, objectId, url);
-		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHttpHypermediaLinks(response));
 	}
 
 	public AbstractWebApiResponse<T> deleteObject(String url, long objectId) throws IOException
 	{
 		final Response response = sendDeleteRequest(combineUrlAndId(url, objectId));
-		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHttpHypermediaLinks(response));
 	}
 
 	public AbstractWebApiResponse<T> deleteObject(String url) throws IOException
 	{
 		final Response response = sendDeleteRequest(url);
-		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHttpHypermediaLinks(response));
 	}
 
 	public AbstractWebApiResponse<T> deleteObjectByURL(String location) throws IOException
 	{
 		final Response response = sendDeleteRequestByURL(location);
-		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHttpHypermediaLinks(response));
 	}
 
 	public AbstractWebApiResponse<T> getDispatcher() throws IOException
 	{
 		Response response = sendGetRequest(WebApiClient.DISPATCHER_URL);
-		return new AbstractWebApiResponse<T>(response.code(), getHypermediaLinks(response));
+		return new AbstractWebApiResponse<T>(response.code(), getHttpHypermediaLinks(response));
 	}
 
-	private Map<String, Map<String, String>> getHypermediaLinks(Response response)
+	private Map<String, Map<String, String>> getAllHypermediaLinks(Response response, String json) throws IOException
+	{
+
+		Map<String, Map<String, String>> bigMap = new HashMap<>();
+		setStudenTripStudentsLink(response, bigMap, json);
+		setHttpLinks(response, bigMap);
+		return bigMap;
+	}
+
+	private Map<String, Map<String, String>> getHttpHypermediaLinks(Response response) throws IOException
+	{
+
+		Map<String, Map<String, String>> bigMap = new HashMap<>();
+		setHttpLinks(response, bigMap);
+		return bigMap;
+	}
+
+	abstract void setStudenTripStudentsLink(Response response, Map<String, Map<String, String>> bigMap, String json)
+		throws IOException;
+
+	private void setHttpLinks(Response response, Map<String, Map<String, String>> allLinks)
 	{
 		List<String> headers = response.headers("Link");
 		List<String[]> collect = headers.stream().map(header -> (header.split(";"))).collect(Collectors.toList());
 
-		Map<String, Map<String, String>> bigMap = new HashMap<>();
 		for (String[] strings : collect)
 		{
 			Map<String, String> map = new HashMap<>();
 			map.put("link", strings[0].replaceAll("<|>", ""));
 			String[] split = strings[1].replaceAll("\"", "").split("=");
-			bigMap.put(split[1], map);
+			allLinks.put(split[1], map);
 
 			if (strings.length > 2)
 			{
@@ -127,7 +152,6 @@ public abstract class AbstractClient<T extends AbstractModel>
 				map.put(split[0], split[1]);
 			}
 		}
-		return bigMap;
 	}
 
 	private String combineUrlAndId(String url, long id)
