@@ -28,7 +28,7 @@ public abstract class AbstractClient<T extends AbstractModel>
 		this.genson = new Genson();
 	}
 
-	public AbstractWebApiResponse<T> loadObjectByURL(String url, long id) throws IOException
+	public AbstractWebApiResponse<T> loadObjectByURLAndId(String url, long id) throws IOException
 	{
 		final Response response = sendGetRequest(combineUrlAndId(url, id));
 		try
