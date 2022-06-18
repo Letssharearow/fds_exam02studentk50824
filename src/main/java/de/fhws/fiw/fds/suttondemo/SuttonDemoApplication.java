@@ -21,7 +21,6 @@ import de.fhws.fiw.fds.exam02.api.services.StudentTripService;
 import de.fhws.fiw.fds.sutton.server.api.AbstractApplication;
 import de.fhws.fiw.fds.suttondemo.api.services.PersonService;
 
-import javax.ws.rs.ApplicationPath;
 import java.util.HashSet;
 import java.util.Set;
 

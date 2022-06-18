@@ -6,5 +6,5 @@ import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 public interface OrderData<T extends AbstractModel>
 {
 
-	CollectionModelResult<T> order(CollectionModelResult<T> result);
+	CollectionModelResult<T> orderCollection(CollectionModelResult<T> result);
 }

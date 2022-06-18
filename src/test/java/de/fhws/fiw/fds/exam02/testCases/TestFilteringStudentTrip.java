@@ -1,4 +1,4 @@
-package de.fhws.fiw.fds.exam02.testClasses;
+package de.fhws.fiw.fds.exam02.testCases;
 
 import org.junit.Test;
 

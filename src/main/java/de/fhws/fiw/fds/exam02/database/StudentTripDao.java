@@ -27,7 +27,7 @@ public interface StudentTripDao extends IDatabaseAccessObject<StudentTrip>
 
 	boolean isValidStudentTrip(StudentTrip model);
 
-	boolean matchString(String variable, String value);
+	boolean isEmptyStartContainedOrEqual(String variable, String value);
 
-	boolean matchTimeperiod(StudentTrip studentTrip, String start, String end);
+	boolean isOverlappingWithTimeperiod(StudentTrip studentTrip, String start, String end);
 }

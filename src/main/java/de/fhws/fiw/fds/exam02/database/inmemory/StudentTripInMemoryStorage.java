@@ -39,40 +39,23 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 	public StudentTripInMemoryStorage()
 	{
 		super();
-		populateData();
 	}
 
-	@Override public CollectionModelResult<StudentTrip> order(CollectionModelResult<StudentTrip> result)
+	@Override public CollectionModelResult<StudentTrip> orderCollection(CollectionModelResult<StudentTrip> result)
 	{
 		ArrayList<StudentTrip> studentTripList = new ArrayList<>(result.getResult());
 		studentTripList.sort(Comparator.comparing(StudentTrip::getStart));
 		return new CollectionModelResult<>(studentTripList);
 	}
 
-	//TODO: remove when done
-	private void populateData()
-	{
-		LocalDate start = LocalDate.of(2022, 2, 15);
-		LocalDate end = LocalDate.of(2022, 3, 1);
-		HashSet<Long> set = new HashSet<>();
-		set.add(1L);
-		StudentTrip model = new StudentTrip("Felix", start, end, "partnerUni", "city", "country", set);
-		createWithoutCheck(model);
-	}
-
-	public void createWithoutCheck(StudentTrip model)
-	{
-		model.setId(nextId());
-		this.storage.put(model.getId(), model);
-	}
-
 	@Override public CollectionModelResult<StudentTrip> readByNameCityCountryDate(String name, String city,
 		String country, String start, String end)
 	{
 		CollectionModelResult<StudentTrip> result = readByPredicate(
-			studentTrip -> matchString(studentTrip.getName(), name) && matchString(studentTrip.getCity(), city)
-				&& matchString(studentTrip.getCountry(), country) && matchTimeperiod(studentTrip, start, end));
-		return order(result);
+			studentTrip -> isEmptyStartContainedOrEqual(studentTrip.getName(), name) && isEmptyStartContainedOrEqual(
+				studentTrip.getCity(), city) && isEmptyStartContainedOrEqual(studentTrip.getCountry(), country)
+				&& isOverlappingWithTimeperiod(studentTrip, start, end));
+		return orderCollection(result);
 	}
 
 	@Override public NoContentResult create(final StudentTrip model)
@@ -113,7 +96,7 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 		return returnValue.get();
 	}
 
-	@Override public boolean matchString(String variable, String value)
+	@Override public boolean isEmptyStartContainedOrEqual(String variable, String value)
 	{
 		variable = variable.toLowerCase(Locale.ROOT);
 		value = value.toLowerCase(Locale.ROOT);
@@ -121,17 +104,18 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 			|| variable.equalsIgnoreCase(value);
 	}
 
-	@Override public boolean matchTimeperiod(final StudentTrip studentTrip, final String start, final String end)
+	//returns true if given time period is anywhere inside the start and end of the studenttrip, or no valid date is given
+	@Override public boolean isOverlappingWithTimeperiod(final StudentTrip studentTrip, final String start,
+		final String end)
 	{
-		Optional<LocalDate> optionalLocalStart = toDate(start);
-		Optional<LocalDate> optionalLocalEnd = toDate(end);
+		Optional<LocalDate> optionalLocalStart = StringToISO_LOCAL_DATE(start);
+		Optional<LocalDate> optionalLocalEnd = StringToISO_LOCAL_DATE(end);
 		LocalDate tripEnd = studentTrip.getEnd();
 		LocalDate tripStart = studentTrip.getStart();
 
 		boolean startExists = !start.isEmpty() && optionalLocalStart.isPresent();
 		boolean endExists = !end.isEmpty() && optionalLocalEnd.isPresent();
 
-		//returns true if given time period is anywhere inside the start and end of the studenttrip, or no valid date is given
 		if (!startExists)
 		{
 			if (!endExists)
@@ -140,31 +124,35 @@ public class StudentTripInMemoryStorage extends AbstractInMemoryStorage<StudentT
 			}
 			else
 			{
-				return (tripEnd.isAfter(optionalLocalEnd.get().minusDays(1)) && tripStart.isBefore(
-					optionalLocalEnd.get().plusDays(1)));
+				LocalDate endSearch = optionalLocalEnd.get();
+				return isInbetween(tripStart, endSearch, tripEnd);
 			}
 		}
 		else
 		{
 			if (!endExists)
 			{
-				return (tripEnd.isAfter(optionalLocalStart.get().minusDays(1)) && tripStart.isBefore(
-					optionalLocalStart.get().plusDays(1)));
+				LocalDate startSearch = optionalLocalStart.get();
+				return isInbetween(tripStart, startSearch, tripEnd);
 			}
 			else
 			{
 				LocalDate startSearch = optionalLocalStart.get();
 				LocalDate endSearch = optionalLocalEnd.get();
-				return (tripStart.isBefore(startSearch.plusDays(1)) && tripEnd.isAfter(startSearch.minusDays(1)) || (
-					tripStart.isBefore(endSearch.plusDays(1)) && tripEnd.isAfter(endSearch.minusDays(1)))
-					|| tripStart.isAfter(startSearch.minusDays(1)) && tripEnd.isBefore(endSearch.plusDays(1)));
+				return isInbetween(tripStart, endSearch, tripEnd) || isInbetween(tripStart, startSearch, tripEnd)
+					|| tripStart.isAfter(startSearch.minusDays(1)) && tripEnd.isBefore(endSearch.plusDays(1));
 			}
 		}
 
 	}
 
+	private boolean isInbetween(LocalDate start, LocalDate middle, LocalDate end)
+	{
+		return end.isAfter(middle.minusDays(1)) && start.isBefore(middle.plusDays(1));
+	}
+
 	//checks for ISO_LOCAL_DATE
-	private Optional<LocalDate> toDate(String date)
+	private Optional<LocalDate> StringToISO_LOCAL_DATE(String date)
 	{
 
 		Optional<LocalDate> optionalLocalDate = Optional.empty();

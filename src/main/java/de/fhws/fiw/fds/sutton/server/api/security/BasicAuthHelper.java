@@ -5,7 +5,6 @@ import org.apache.commons.codec.binary.Base64;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.HttpHeaders;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class BasicAuthHelper

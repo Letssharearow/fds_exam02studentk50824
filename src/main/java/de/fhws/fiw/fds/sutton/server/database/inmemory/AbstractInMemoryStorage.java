@@ -17,9 +17,9 @@
 package de.fhws.fiw.fds.sutton.server.database.inmemory;
 
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
+import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
-import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import org.apache.commons.lang.ObjectUtils;
 
 import java.util.Collection;

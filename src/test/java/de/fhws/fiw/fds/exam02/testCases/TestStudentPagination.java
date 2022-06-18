@@ -1,4 +1,4 @@
-package de.fhws.fiw.fds.exam02.testClasses;
+package de.fhws.fiw.fds.exam02.testCases;
 
 import de.fhws.fiw.fds.exam02.api.AbstractWebApiResponse;
 import de.fhws.fiw.fds.exam02.api.WebApiClientStudent;
@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -178,7 +179,21 @@ public class TestStudentPagination
 
 	@Test public void testPageLinkNextOnLastPage()
 	{
-		//TODO
+		WebApiClientStudent clientStudent = new WebApiClientStudent();
+		try
+		{
+			AbstractWebApiResponse<StudentView> getResponse = clientStudent.loadAllObjectsByUrl(studentURL);
+
+			getResponse = clientStudent.loadAllObjectsByUrl(getResponse.getLink("next"));
+			getResponse = clientStudent.loadAllObjectsByUrl(getResponse.getLink("next"));
+			getResponse = clientStudent.loadAllObjectsByUrl(getResponse.getLink("next"));
+			getResponse = clientStudent.loadAllObjectsByUrl(getResponse.getLink("next"));
+			Map<String, String> next = getResponse.getLinks().get("next");
+			assertNull(next);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
-	//TODO: only one page exists, next and prev? I need assert that I am in a fresh environment
 }

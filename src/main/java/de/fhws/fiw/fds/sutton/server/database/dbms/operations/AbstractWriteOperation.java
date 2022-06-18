@@ -17,8 +17,8 @@
 package de.fhws.fiw.fds.sutton.server.database.dbms.operations;
 
 import de.fhws.fiw.fds.sutton.server.database.dbms.IPersistency;
-import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
+import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

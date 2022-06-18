@@ -16,25 +16,18 @@ public class StudentInMemoryStorage extends AbstractInMemoryStorage<Student> imp
 	public StudentInMemoryStorage()
 	{
 		super();
-		populateData();
-	}
-
-	//TODO: remove when done
-	private void populateData()
-	{
-		create(new Student("firstName", "lastName", "course", 4, 5120051, "email"));
 	}
 
 	@Override public CollectionModelResult<Student> readStudentsById(Set<Long> studentsInStudentTrip)
 	{
 		CollectionModelResult<Student> result = readByPredicate(
 			student -> studentsInStudentTrip.contains(student.getId()));
-		return order(result);
+		return orderCollection(result);
 	}
 
 	@Override public CollectionModelResult<Student> loadStudents()
 	{
-		return order(readByPredicate(student -> true));
+		return orderCollection(readByPredicate(student -> true));
 	}
 
 	@Override public NoContentResult delete(final long id)
@@ -52,7 +45,7 @@ public class StudentInMemoryStorage extends AbstractInMemoryStorage<Student> imp
 		});
 	}
 
-	@Override public CollectionModelResult<Student> order(CollectionModelResult<Student> result)
+	@Override public CollectionModelResult<Student> orderCollection(CollectionModelResult<Student> result)
 	{
 		ArrayList<Student> studentTripList = new ArrayList<>(result.getResult());
 		studentTripList.sort((o1, o2) -> {

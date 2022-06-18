@@ -1,7 +1,7 @@
 package de.fhws.fiw.fds.sutton.server.database.dbms.tables;
 
-import de.fhws.fiw.fds.sutton.server.database.dbms.operations.PreparedStatementHelper;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
+import de.fhws.fiw.fds.sutton.server.database.dbms.operations.PreparedStatementHelper;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
