@@ -1,6 +1,5 @@
 package de.fhws.fiw.fds.exam02.testClasses;
 
-import de.fhws.fiw.fds.exam02.api.AbstractClient;
 import de.fhws.fiw.fds.exam02.api.AbstractWebApiResponse;
 import de.fhws.fiw.fds.exam02.api.WebApiClientStudent;
 import de.fhws.fiw.fds.exam02.models.StudentView;
@@ -9,9 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -21,7 +18,7 @@ public class TestStudentPagination
 {
 	private final String studentURL = "http://localhost:8080/exam02/api/Students";
 
-	List<AbstractWebApiResponse<StudentView>> responses = new ArrayList<>();
+	private final List<AbstractWebApiResponse<StudentView>> responses = new ArrayList<>();
 
 	@Before public void createData()
 	{
@@ -55,9 +52,8 @@ public class TestStudentPagination
 		int targetStringLength = 5;
 		Random random = new Random();
 
-		String generatedString = random.ints(leftLimit, rightLimit + 1).limit(targetStringLength)
+		return random.ints(leftLimit, rightLimit + 1).limit(targetStringLength)
 			.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
-		return generatedString;
 	}
 
 	@After public void removeData()

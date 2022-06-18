@@ -1,14 +1,15 @@
 package de.fhws.fiw.fds.exam02.testClasses;
 
+import com.owlike.genson.Genson;
 import de.fhws.fiw.fds.exam02.api.AbstractClient;
 import de.fhws.fiw.fds.exam02.api.AbstractWebApiResponse;
 import de.fhws.fiw.fds.exam02.api.WebApiClientStudent;
 import de.fhws.fiw.fds.exam02.api.WebApiClientStudentTrip;
 import de.fhws.fiw.fds.exam02.models.StudentTripView;
 import de.fhws.fiw.fds.exam02.models.StudentView;
-import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 import org.junit.Test;
 
+import javax.ws.rs.core.Link;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -19,7 +20,6 @@ import static org.junit.Assert.*;
 
 public class TestStudentTripHypermedia
 {
-	private final String studentURL = "http://localhost:8080/exam02/api/Students";
 
 	public StudentTripView getEmptyStudentTripView()
 	{
@@ -65,14 +65,14 @@ public class TestStudentTripHypermedia
 		return client.getDispatcher();
 	}
 
-	public AbstractWebApiResponse<StudentTripView> getGetAllStudenTripsState(AbstractClient<StudentTripView> client)
+	public AbstractWebApiResponse<StudentTripView> getGetAllStudentTripsState(AbstractClient<StudentTripView> client)
 		throws IOException
 	{
 		String url = getDispatcherState(client).getLink("getAllStudentTrips");
 		return client.loadAllObjectsByUrl(url);
 	}
 
-	public AbstractWebApiResponse<StudentTripView> getCreateStudenTripState(AbstractClient<StudentTripView> client,
+	public AbstractWebApiResponse<StudentTripView> getCreateStudentTripState(AbstractClient<StudentTripView> client,
 		StudentTripView studentTripView) throws IOException
 	{
 		String url = getDispatcherState(client).getLink("createStudentTrip");
@@ -91,13 +91,13 @@ public class TestStudentTripHypermedia
 		return returnValue;
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaGetSingleStudentripLink()
+	@Test public void testGetAllStudentTripsHypermediaGetSingleStudentripLink()
 	{
 		final AbstractClient<StudentTripView> client = new WebApiClientStudentTrip();
 		AbstractWebApiResponse<StudentTripView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetAllStudentTripsState(client);
 		}
 		catch (IOException e)
 		{
@@ -111,13 +111,13 @@ public class TestStudentTripHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips/{id}", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByNameLink()
+	@Test public void testGetAllStudentTripsHypermediaSearchByNameLink()
 	{
 		final AbstractClient<StudentTripView> client = new WebApiClientStudentTrip();
 		AbstractWebApiResponse<StudentTripView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetAllStudentTripsState(client);
 		}
 		catch (IOException e)
 		{
@@ -131,13 +131,13 @@ public class TestStudentTripHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?name=Name", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByCityLink()
+	@Test public void testGetAllStudentTripsHypermediaSearchByCityLink()
 	{
 		final AbstractClient<StudentTripView> client = new WebApiClientStudentTrip();
 		AbstractWebApiResponse<StudentTripView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetAllStudentTripsState(client);
 		}
 		catch (IOException e)
 		{
@@ -151,13 +151,13 @@ public class TestStudentTripHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?city=City", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByCountryLink()
+	@Test public void testGetAllStudentTripsHypermediaSearchByCountryLink()
 	{
 		final AbstractClient<StudentTripView> client = new WebApiClientStudentTrip();
 		AbstractWebApiResponse<StudentTripView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetAllStudentTripsState(client);
 		}
 		catch (IOException e)
 		{
@@ -172,13 +172,13 @@ public class TestStudentTripHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips?country=Country", "application/json");
 	}
 
-	@Test public void testGetAllStudentTripsHypermeidaSearchByDateLink()
+	@Test public void testGetAllStudentTripsHypermediaSearchByDateLink()
 	{
 		final AbstractClient<StudentTripView> client = new WebApiClientStudentTrip();
 		AbstractWebApiResponse<StudentTripView> response = null;
 		try
 		{
-			response = getGetAllStudenTripsState(client);
+			response = getGetAllStudentTripsState(client);
 		}
 		catch (IOException e)
 		{
@@ -193,7 +193,7 @@ public class TestStudentTripHypermedia
 			"application/json");
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaDelete()
+	@Test public void testGetSingleStudentTripsHypermediaDelete()
 	{
 		final AbstractClient<StudentTripView> client = new WebApiClientStudentTrip();
 		AbstractWebApiResponse<StudentTripView> response = null;
@@ -215,7 +215,7 @@ public class TestStudentTripHypermedia
 				.getId(), "application/json");
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaPut()
+	@Test public void testGetSingleStudentTripsHypermediaPut()
 	{
 		final AbstractClient<StudentTripView> client = new WebApiClientStudentTrip();
 		AbstractWebApiResponse<StudentTripView> response = null;
@@ -237,7 +237,7 @@ public class TestStudentTripHypermedia
 				.getId(), "application/json");
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaSelf()
+	@Test public void testGetSingleStudentTripsHypermediaSelf()
 	{
 		final AbstractClient<StudentTripView> client = new WebApiClientStudentTrip();
 		AbstractWebApiResponse<StudentTripView> response = null;
@@ -259,7 +259,7 @@ public class TestStudentTripHypermedia
 				.getId(), link.get("link"));
 	}
 
-	@Test public void testGetSingleStudentTripsHypermeidaGetAllStudentTrips()
+	@Test public void testGetSingleStudentTripsHypermediaGetAllStudentTrips()
 	{
 		final AbstractClient<StudentTripView> client = new WebApiClientStudentTrip();
 		AbstractWebApiResponse<StudentTripView> response = null;
@@ -279,16 +279,17 @@ public class TestStudentTripHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/StudentTrips", "application/json");
 	}
 
-	@Test public void testLinkforStudentsOfStudenTripHypermedia()
+	@Test public void testLinkforStudentsOfStudentTripHypermedia()
 	{
 		final WebApiClientStudentTrip webApiClientStudentTrip = new WebApiClientStudentTrip();
 		WebApiClientStudent webApiClientStudent = new WebApiClientStudent();
-		AbstractWebApiResponse<StudentTripView> response = null;
+		AbstractWebApiResponse<StudentTripView> response;
 
 		StudentView studentView = new StudentView("name", "lastName", "course", 4, 5120051, "email");
 		StudentTripView studentTripView = getEmptyStudentTripView();
 		try
 		{
+			String studentURL = "http://localhost:8080/exam02/api/Students";
 			AbstractWebApiResponse<StudentView> studentPostResponse = webApiClientStudent.postObject(studentURL,
 				studentView);
 			long studentId = webApiClientStudent.loadObjectByURL(studentPostResponse.getLink("getStudent"))
@@ -305,7 +306,7 @@ public class TestStudentTripHypermedia
 			Map<String, String> link = links.get("getStudents");
 			assertNotNull(link);
 			assertFalse(link.isEmpty());
-			checkLinkAndType(link, studentTripPostResponse.getLink("self") + "/Students", "application/json");
+			checkLinkAndType(link, studentTripGetResponse.getLink("self") + "/Students", "application/json");
 
 			deleteStudentView(webApiClientStudent, studentPostResponse);
 			deleteStudentTripView(webApiClientStudentTrip, studentTripPostResponse);
@@ -336,6 +337,21 @@ public class TestStudentTripHypermedia
 	{
 		assertEquals(link, link_get.get("link"));
 		assertEquals(type, link_get.get("type"));
+	}
+
+	public static void main(String[] args)
+	{
+		Genson genson = new Genson();
+		String json = "{\n" + "        \"city\": \"city\",\n" + "        \"country\": \"country\",\n"
+			+ "        \"end\": \"2022-03-10\",\n" + "        \"id\": 4,\n" + "        \"name\": \"template\",\n"
+			+ "        \"partnerUniversity\": \"partnerUni\",\n" + "        \"start\": \"1960-02-09\",\n"
+			+ "        \"studentIds\": [\n" + "            2\n" + "        ],\n" + "        \"studentsLink\": {\n"
+			+ "            \"href\": \"http://localhost:8080/exam02/api/StudentTrips/4/Students\",\n"
+			+ "            \"rel\": \"getStudents\",\n" + "            \"type\": \"application/json\"\n" + "        }\n"
+			+ "    }";
+		StudentTripView studentTripView = genson.deserialize(json, StudentTripView.class);
+		String linkString = studentTripView.toString();
+		boolean b = true;
 	}
 
 }

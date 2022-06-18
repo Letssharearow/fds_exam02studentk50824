@@ -3,11 +3,8 @@ package de.fhws.fiw.fds.exam02.testClasses;
 import de.fhws.fiw.fds.exam02.api.AbstractClient;
 import de.fhws.fiw.fds.exam02.api.AbstractWebApiResponse;
 import de.fhws.fiw.fds.exam02.api.WebApiClientStudentTrip;
-import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.exam02.models.StudentTripView;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -20,20 +17,20 @@ import static org.junit.Assert.*;
 public class TestStudentTripPagination
 {
 
-	List<AbstractWebApiResponse<StudentTripView>> responses = new ArrayList<>();
+	static final List<AbstractWebApiResponse<StudentTripView>> responses = new ArrayList<>();
 
-	public AbstractWebApiResponse<StudentTripView> getDispatcherState(AbstractClient<StudentTripView> client)
+	public static AbstractWebApiResponse<StudentTripView> getDispatcherState(AbstractClient<StudentTripView> client)
 		throws IOException
 	{
 		return client.getDispatcher();
 	}
 
-	@Before public void createData()
+	@BeforeClass public void createData()
 	{
 		StudentTripView model = getStudentTripView();
 
 		WebApiClientStudentTrip clientStudentTrip = new WebApiClientStudentTrip();
-		AbstractWebApiResponse<StudentTripView> dispatcherState = null;
+		AbstractWebApiResponse<StudentTripView> dispatcherState;
 		try
 		{
 			dispatcherState = getDispatcherState(clientStudentTrip);
@@ -48,7 +45,7 @@ public class TestStudentTripPagination
 		}
 	}
 
-	private StudentTripView getStudentTripView()
+	private static StudentTripView getStudentTripView()
 	{
 		LocalDate start = LocalDate.of(2022, 2, 15);
 		LocalDate end = LocalDate.of(2022, 3, 1);
@@ -57,7 +54,7 @@ public class TestStudentTripPagination
 		return new StudentTripView("Felix", 0L, start, end, "partnerUni", "city", "country", set);
 	}
 
-	@After public void removeData()
+	@AfterClass public void removeData()
 	{
 		WebApiClientStudentTrip clientStudentTrip = new WebApiClientStudentTrip();
 
@@ -106,7 +103,7 @@ public class TestStudentTripPagination
 	@Test public void testDefaultPage()
 	{
 		WebApiClientStudentTrip clientStudentTrip = new WebApiClientStudentTrip();
-		AbstractWebApiResponse<StudentTripView> dispatcherState = null;
+		AbstractWebApiResponse<StudentTripView> dispatcherState;
 		try
 		{
 			dispatcherState = getDispatcherState(clientStudentTrip);
@@ -123,7 +120,7 @@ public class TestStudentTripPagination
 	@Test public void testPageLinkOnFirstPage()
 	{
 		WebApiClientStudentTrip clientStudentTrip = new WebApiClientStudentTrip();
-		AbstractWebApiResponse<StudentTripView> dispatcherState = null;
+		AbstractWebApiResponse<StudentTripView> dispatcherState;
 		try
 		{
 			dispatcherState = getDispatcherState(clientStudentTrip);
@@ -145,7 +142,7 @@ public class TestStudentTripPagination
 	@Test public void testPageLinkNumberOnAnyPage()
 	{
 		WebApiClientStudentTrip clientStudentTrip = new WebApiClientStudentTrip();
-		AbstractWebApiResponse<StudentTripView> dispatcherState = null;
+		AbstractWebApiResponse<StudentTripView> dispatcherState;
 		try
 		{
 			dispatcherState = getDispatcherState(clientStudentTrip);

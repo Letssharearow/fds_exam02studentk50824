@@ -1,9 +1,7 @@
 package de.fhws.fiw.fds.exam02.testClasses;
 
 import de.fhws.fiw.fds.exam02.api.AbstractWebApiResponse;
-import de.fhws.fiw.fds.exam02.api.WebApiClient;
 import de.fhws.fiw.fds.exam02.api.WebApiClientStudentTrip;
-import de.fhws.fiw.fds.exam02.api.WebApiResponse;
 import de.fhws.fiw.fds.exam02.database.inmemory.StudentTripInMemoryStorage;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.exam02.models.StudentTripView;
@@ -12,16 +10,14 @@ import org.junit.Test;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 public class TestTimeperiod
 {
-	String url = "http://localhost:8080/exam02/api/StudentTrips";
+	final String url = "http://localhost:8080/exam02/api/StudentTrips";
 
-	@Test public void testDateInStorage() throws IOException
+	@Test public void testDateInStorage()
 	{
 		LocalDate start = LocalDate.of(2022, 2, 15);
 		LocalDate end = LocalDate.of(2022, 3, 1);

@@ -14,55 +14,55 @@ public class WebApiResponse<T extends AbstractModel>
 
 	private String locationHeader;
 
-	public WebApiResponse( final int lastStatusCode )
+	public WebApiResponse(final int lastStatusCode)
 	{
-		this( Collections.EMPTY_LIST, lastStatusCode );
+		this(Collections.EMPTY_LIST, lastStatusCode);
 	}
 
-	public WebApiResponse( final int lastStatusCode, final String locationHeader )
+	public WebApiResponse(final int lastStatusCode, final String locationHeader)
 	{
-		this( Collections.EMPTY_LIST, lastStatusCode );
+		this(Collections.EMPTY_LIST, lastStatusCode);
 		this.locationHeader = locationHeader;
 	}
 
-	public WebApiResponse( final T responseData, final int lastStatusCode )
+	public WebApiResponse(final T responseData, final int lastStatusCode)
 	{
-		this( Optional.of( responseData ), lastStatusCode );
+		this(Optional.of(responseData), lastStatusCode);
 	}
 
-	public WebApiResponse( final Optional<T> responseData, final int lastStatusCode )
+	public WebApiResponse(final Optional<T> responseData, final int lastStatusCode)
 	{
-		this( convertToList( responseData ), lastStatusCode );
+		this(convertToList(responseData), lastStatusCode);
 	}
 
-	public WebApiResponse( final Collection<T> responseData, final int lastStatusCode )
+	public WebApiResponse(final Collection<T> responseData, final int lastStatusCode)
 	{
 		this.responseData = responseData;
 		this.lastStatusCode = lastStatusCode;
 	}
 
-	public Collection<T> getResponseData( )
+	public Collection<T> getResponseData()
 	{
 		return responseData;
 	}
 
-	public Optional<T> getFirstResponse( )
+	public Optional<T> getFirstResponse()
 	{
-		return this.responseData.stream( ).findFirst( );
+		return this.responseData.stream().findFirst();
 	}
 
-	public int getLastStatusCode( )
+	public int getLastStatusCode()
 	{
 		return lastStatusCode;
 	}
 
-	public String getLocationHeader( )
+	public String getLocationHeader()
 	{
 		return locationHeader;
 	}
 
-	private static <T> Collection<T> convertToList( final Optional<T> object )
+	private static <T> Collection<T> convertToList(final Optional<T> object)
 	{
-		return object.isPresent( ) ? Collections.singletonList( object.get( ) ) : Collections.emptyList( );
+		return object.map(Collections::singletonList).orElse(Collections.emptyList());
 	}
 }

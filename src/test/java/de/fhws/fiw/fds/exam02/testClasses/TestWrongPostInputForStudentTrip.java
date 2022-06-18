@@ -42,7 +42,7 @@ public class TestWrongPostInputForStudentTrip
 		return client.getDispatcher();
 	}
 
-	public AbstractWebApiResponse<StudentTripView> getGetAllStudenTripsState(AbstractClient<StudentTripView> client)
+	public AbstractWebApiResponse<StudentTripView> getGetAllStudentTripsState(AbstractClient<StudentTripView> client)
 		throws IOException
 	{
 		String url = getDispatcherState(client).getLink("getAllStudentTrips");

@@ -1,7 +1,6 @@
 package de.fhws.fiw.fds.exam02.testClasses;
 
 import de.fhws.fiw.fds.exam02.api.*;
-import de.fhws.fiw.fds.exam02.api.AbstractClient;
 import de.fhws.fiw.fds.exam02.models.StudentView;
 import org.junit.Test;
 
@@ -33,15 +32,14 @@ public class TestStudentHypermedia
 	public AbstractWebApiResponse<StudentView> getGetSingleStudentState(AbstractClient<StudentView> client)
 		throws IOException
 	{
-		String postUrl = studentURL;
-		AbstractWebApiResponse<StudentView> postResponse = client.postObject(postUrl, getEmptyStudent());
+		AbstractWebApiResponse<StudentView> postResponse = client.postObject(studentURL, getEmptyStudent());
 		String getUrl = postResponse.getLink("getStudent");
 		AbstractWebApiResponse<StudentView> returnValue = client.loadObjectByURL(getUrl);
 		client.deleteObject(returnValue.getLink("deleteStudent"));
 		return returnValue;
 	}
 
-	@Test public void testGetAllStudentsHypermeidaGetSingleStudentLink()
+	@Test public void testGetAllStudentsHypermediaGetSingleStudentLink()
 	{
 		final AbstractClient<StudentView> client = new WebApiClientStudent();
 		AbstractWebApiResponse<StudentView> response = null;
@@ -69,7 +67,7 @@ public class TestStudentHypermedia
 		checkLinkAndType(link, "http://localhost:8080/exam02/api/Students/{id}", "application/json");
 	}
 
-	@Test public void testGetSingleStudentsHypermeidaDelete()
+	@Test public void testGetSingleStudentsHypermediaDelete()
 	{
 		final AbstractClient<StudentView> client = new WebApiClientStudent();
 		AbstractWebApiResponse<StudentView> response = null;
@@ -91,7 +89,7 @@ public class TestStudentHypermedia
 				.getId(), "application/json");
 	}
 
-	@Test public void testGetSingleStudentsHypermeidaPut()
+	@Test public void testGetSingleStudentsHypermediaPut()
 	{
 		final AbstractClient<StudentView> client = new WebApiClientStudent();
 		AbstractWebApiResponse<StudentView> response = null;
@@ -113,7 +111,7 @@ public class TestStudentHypermedia
 				.getId(), "application/json");
 	}
 
-	@Test public void testGetSingleStudentsHypermeidaSelf()
+	@Test public void testGetSingleStudentsHypermediaSelf()
 	{
 		final AbstractClient<StudentView> client = new WebApiClientStudent();
 		AbstractWebApiResponse<StudentView> response = null;
@@ -135,7 +133,7 @@ public class TestStudentHypermedia
 				.getId(), link.get("link"));
 	}
 
-	@Test public void testGetSingleStudentsHypermeidaGetAllStudents()
+	@Test public void testGetSingleStudentsHypermediaGetAllStudents()
 	{
 		final AbstractClient<StudentView> client = new WebApiClientStudent();
 		AbstractWebApiResponse<StudentView> response = null;
