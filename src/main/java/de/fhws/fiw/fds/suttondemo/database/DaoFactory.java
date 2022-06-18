@@ -24,7 +24,7 @@ public class DaoFactory
 {
 	private static DaoFactory INSTANCE;
 
-	public static final DaoFactory getInstance()
+	public static DaoFactory getInstance()
 	{
 		if (INSTANCE == null)
 		{

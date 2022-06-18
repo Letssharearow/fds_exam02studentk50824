@@ -16,8 +16,8 @@
 
 package de.fhws.fiw.fds.exam02.api.states.get;
 
-import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripRelTypes;
-import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
+import de.fhws.fiw.fds.exam02.strings.studentTripStrings.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.strings.studentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
@@ -46,10 +46,10 @@ public class GetSingleStudentTrip extends AbstractGetState<StudentTrip>
 	@Override protected void defineTransitionLinks()
 	{
 		addLink(StudentTripUri.REL_PATH_ID.replaceAll("\\{id}", this.loadModel().getResult().getId() + ""),
-			StudentTripRelTypes.UPDATE_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
+			StudentTripRelTypes.UPDATE_STUDENT_TRIP, MediaType.APPLICATION_JSON);
 		addLink(StudentTripUri.REL_PATH_ID.replaceAll("\\{id}", this.loadModel().getResult().getId() + ""),
-			StudentTripRelTypes.DELETE_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
-		addLink(StudentTripUri.REL_PATH, StudentTripRelTypes.GET_ALL_STUDENTTRIPS, MediaType.APPLICATION_JSON);
+			StudentTripRelTypes.DELETE_STUDENT_TRIP, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.REL_PATH, StudentTripRelTypes.GET_ALL_STUDENT_TRIPS, MediaType.APPLICATION_JSON);
 	}
 
 	public static class Builder extends AbstractGetStateBuilder

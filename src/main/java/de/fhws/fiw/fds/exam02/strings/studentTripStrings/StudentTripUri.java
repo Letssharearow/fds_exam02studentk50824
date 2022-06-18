@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.exam02.Strings.StudentTripStrings;
+package de.fhws.fiw.fds.exam02.strings.studentTripStrings;
 
 import de.fhws.fiw.fds.suttondemo.Start;
 

@@ -16,8 +16,8 @@
 
 package de.fhws.fiw.fds.exam02.api.states.put;
 
-import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripRelTypes;
-import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
+import de.fhws.fiw.fds.exam02.strings.studentTripStrings.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.strings.studentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
@@ -47,7 +47,7 @@ public class PutSingleStudentTrip extends AbstractPutState<StudentTrip>
 	@Override protected void defineTransitionLinks()
 	{
 		addLink(StudentTripUri.REL_PATH_ID.replaceAll("\\{id}", this.loadModel().getResult().getId() + ""),
-			StudentTripRelTypes.GET_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
+			StudentTripRelTypes.GET_STUDENT_TRIP, MediaType.APPLICATION_JSON);
 	}
 
 	public static class Builder extends AbstractPutStateBuilder<StudentTrip>

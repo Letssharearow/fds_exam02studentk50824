@@ -1,6 +1,6 @@
 package de.fhws.fiw.fds.exam02.api.services;
 
-import de.fhws.fiw.fds.exam02.api.Query.QueryAllStudents;
+import de.fhws.fiw.fds.exam02.api.query.QueryAllStudents;
 import de.fhws.fiw.fds.exam02.api.states.delete.DeleteSingleStudent;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudents;
 import de.fhws.fiw.fds.exam02.api.states.get.GetSingleStudent;

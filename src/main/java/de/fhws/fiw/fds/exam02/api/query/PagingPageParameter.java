@@ -1,4 +1,4 @@
-package de.fhws.fiw.fds.exam02.api.Query;
+package de.fhws.fiw.fds.exam02.api.query;
 
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.queries.PagingBehavior;
@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public class PagingPageParameter extends PagingBehavior<StudentTrip>
 {
 	private static final int DEFAULT_PAGE_SIZE = 10;
-	private int pageNumber = 1;
-	private String path;
+	private int pageNumber;
+	private final String path;
 
 	public PagingPageParameter(int pageNumber, String path)
 	{
@@ -41,7 +41,6 @@ public class PagingPageParameter extends PagingBehavior<StudentTrip>
 
 	@Override protected URI getSelfUri(UriInfo uriInfo)
 	{
-		URI page = uriInfo.getRequestUriBuilder().queryParam("page", pageNumber).build();
 		return uriInfo.getBaseUriBuilder().path(path).queryParam("page", pageNumber).build();
 	}
 

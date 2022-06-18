@@ -16,8 +16,8 @@
 
 package de.fhws.fiw.fds.exam02.api.states.get;
 
-import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripRelTypes;
-import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
+import de.fhws.fiw.fds.exam02.strings.studentTripStrings.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.strings.studentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetCollectionState;
@@ -43,12 +43,15 @@ public class GetAllStudentTrips extends AbstractGetCollectionState<StudentTrip>
 
 	@Override protected void defineTransitionLinks()
 	{
-		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.GET_SINGLE_STUDENTTRIP, MediaType.APPLICATION_JSON);
-		addLink(StudentTripUri.SEARCH_CITY, StudentTripRelTypes.SEARCH_STUDENTTRIP_BY_CITY, MediaType.APPLICATION_JSON);
-		addLink(StudentTripUri.SEARCH_DATE, StudentTripRelTypes.SEARCH_STUDENTTRIP_BY_DATE, MediaType.APPLICATION_JSON);
-		addLink(StudentTripUri.SEARCH_COUNTRY, StudentTripRelTypes.SEARCH_STUDENTTRIP_BY_COUNTRY,
+		addLink(StudentTripUri.REL_PATH_ID, StudentTripRelTypes.GET_STUDENT_TRIP, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.SEARCH_CITY, StudentTripRelTypes.SEARCH_STUDENT_TRIP_BY_CITY,
 			MediaType.APPLICATION_JSON);
-		addLink(StudentTripUri.SEARCH_NAME, StudentTripRelTypes.SEARCH_STUDENTTRIP_BY_NAME, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.SEARCH_DATE, StudentTripRelTypes.SEARCH_STUDENT_TRIP_BY_DATE,
+			MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.SEARCH_COUNTRY, StudentTripRelTypes.SEARCH_STUDENT_TRIP_BY_COUNTRY,
+			MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.SEARCH_NAME, StudentTripRelTypes.SEARCH_STUDENT_TRIP_BY_NAME,
+			MediaType.APPLICATION_JSON);
 	}
 
 	@Override protected void authorizeRequest()

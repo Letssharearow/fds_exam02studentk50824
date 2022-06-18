@@ -1,11 +1,9 @@
-package de.fhws.fiw.fds.exam02.api.Query;
+package de.fhws.fiw.fds.exam02.api.query;
 
-import de.fhws.fiw.fds.exam02.Strings.StudentStrings.StudentUri;
-import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
+import de.fhws.fiw.fds.exam02.strings.studentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.queries.AbstractQuery;
-import de.fhws.fiw.fds.sutton.server.database.DatabaseException;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 
 public class QueryPageParameter extends AbstractQuery<StudentTrip>
@@ -27,7 +25,7 @@ public class QueryPageParameter extends AbstractQuery<StudentTrip>
 		setPagingBehavior(new PagingPageParameter(pageNumber, StudentTripUri.PATH_ELEMENT));
 	}
 
-	@Override protected CollectionModelResult<StudentTrip> doExecuteQuery() throws DatabaseException
+	@Override protected CollectionModelResult<StudentTrip> doExecuteQuery()
 	{
 		return DaoFactory.getInstance().getStudentTripDao().readByNameCityCountryDate(name, city, country, start, end);
 	}

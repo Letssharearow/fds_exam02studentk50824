@@ -19,76 +19,75 @@ public class PagingBehaviorUsingPage<T extends AbstractModel> extends PagingBeha
 
 	protected int pageNumber;
 
-	public PagingBehaviorUsingPage( final String pageQueryParamName, final int pageNumber )
+	public PagingBehaviorUsingPage(final String pageQueryParamName, final int pageNumber)
 	{
 		this.pageQueryParamName = pageQueryParamName;
-		setPageNumber( pageNumber );
+		setPageNumber(pageNumber);
 	}
 
-	public PagingBehaviorUsingPage( final int pageNumber )
+	public PagingBehaviorUsingPage(final int pageNumber)
 	{
-		setPageNumber( pageNumber );
+		setPageNumber(pageNumber);
 	}
 
-	@Override protected List<T> page( final Collection<T> result )
+	@Override protected List<T> page(final Collection<T> result)
 	{
-		this.pageNumber = Math.min( this.pageNumber, highestPageNumberAllowed( result ) );
-		final int skip = ( this.pageNumber - 1 ) * DEFAULT_PAGE_SIZE;
-		return result.stream( ).skip( skip ).limit( DEFAULT_PAGE_SIZE ).collect( Collectors.toList( ) );
+		this.pageNumber = Math.min(this.pageNumber, highestPageNumberAllowed(result));
+		final int skip = (this.pageNumber - 1) * DEFAULT_PAGE_SIZE;
+		return result.stream().skip(skip).limit(DEFAULT_PAGE_SIZE).collect(Collectors.toList());
 	}
 
-	private int highestPageNumberAllowed( final Collection<T> result )
+	private int highestPageNumberAllowed(final Collection<T> result)
 	{
-		return Math.max( 1, ( int ) Math.ceil( ( double ) result.size( ) / DEFAULT_PAGE_SIZE ) );
+		return Math.max(1, (int) Math.ceil((double) result.size() / DEFAULT_PAGE_SIZE));
 	}
 
-	@Override protected boolean hasNextLink( final CollectionModelResult<?> result )
+	@Override protected boolean hasNextLink(final CollectionModelResult<?> result)
 	{
-		return this.pageNumber * DEFAULT_PAGE_SIZE < result.getTotalNumberOfResult( );
+		return this.pageNumber * DEFAULT_PAGE_SIZE < result.getTotalNumberOfResult();
 	}
 
-	@Override protected boolean hasPrevLink( )
+	@Override protected boolean hasPrevLink()
 	{
 		return this.pageNumber > 1;
 	}
 
-	@Override protected URI getSelfUri( final UriInfo uriInfo )
+	@Override protected URI getSelfUri(final UriInfo uriInfo)
 	{
-		final UriBuilder uriBuilder = createUriBuilder( uriInfo );
-		return uriBuilder.build( this.pageNumber );
+		final UriBuilder uriBuilder = createUriBuilder(uriInfo);
+		return uriBuilder.build(this.pageNumber);
 	}
 
-	@Override protected URI getPrevUri( final UriInfo uriInfo )
+	@Override protected URI getPrevUri(final UriInfo uriInfo)
 	{
-		final UriBuilder uriBuilder = createUriBuilder( uriInfo );
-		return uriBuilder.build( this.pageNumber - 1 );
+		final UriBuilder uriBuilder = createUriBuilder(uriInfo);
+		return uriBuilder.build(this.pageNumber - 1);
 	}
 
-	@Override protected URI getNextUri( final UriInfo uriInfo, final CollectionModelResult<?> result )
+	@Override protected URI getNextUri(final UriInfo uriInfo, final CollectionModelResult<?> result)
 	{
-		final UriBuilder uriBuilder = createUriBuilder( uriInfo );
-		return uriBuilder.build( this.pageNumber + 1 );
+		final UriBuilder uriBuilder = createUriBuilder(uriInfo);
+		return uriBuilder.build(this.pageNumber + 1);
 	}
 
-	private void setPageNumber( final int pageNumber )
+	private void setPageNumber(final int pageNumber)
 	{
-		this.pageNumber = Math.max( 1, pageNumber );
+		this.pageNumber = Math.max(1, pageNumber);
 	}
 
-	private UriBuilder createUriBuilder( final UriInfo uriInfo )
+	private UriBuilder createUriBuilder(final UriInfo uriInfo)
 	{
-		return uriInfo.getRequestUriBuilder( )
-					  .replaceQueryParam( getPageParamName( ), getQueryParamPageAsTemplate( ) );
+		return uriInfo.getRequestUriBuilder().replaceQueryParam(getPageParamName(), getQueryParamPageAsTemplate());
 	}
 
-	private String getPageParamName( )
+	private String getPageParamName()
 	{
 		return this.pageQueryParamName;
 	}
 
-	private final String getQueryParamPageAsTemplate( )
+	private String getQueryParamPageAsTemplate()
 	{
-		return "{" + getPageParamName( ) + "}";
+		return "{" + getPageParamName() + "}";
 	}
 
 }

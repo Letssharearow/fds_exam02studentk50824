@@ -11,16 +11,12 @@ import de.fhws.fiw.fds.sutton.utils.UriHelper;
 import de.fhws.fiw.fds.sutton.utils.XmlDateTimeConverter;
 import org.glassfish.jersey.linking.InjectLink;
 
-import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @XmlRootElement @XmlAccessorType(XmlAccessType.FIELD) public class StudentTrip extends AbstractModel
@@ -99,7 +95,7 @@ import java.util.Set;
 	public void setStart(LocalDate start)
 	{
 		this.start = start;
-	} //TODO: make names consistent "start" and "end"
+	}
 
 	@JsonConverter(JsonDateTimeConverter.class)
 

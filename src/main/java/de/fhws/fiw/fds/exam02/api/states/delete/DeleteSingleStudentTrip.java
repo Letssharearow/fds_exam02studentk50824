@@ -16,8 +16,8 @@
 
 package de.fhws.fiw.fds.exam02.api.states.delete;
 
-import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripRelTypes;
-import de.fhws.fiw.fds.exam02.Strings.StudentTripStrings.StudentTripUri;
+import de.fhws.fiw.fds.exam02.strings.studentTripStrings.StudentTripRelTypes;
+import de.fhws.fiw.fds.exam02.strings.studentTripStrings.StudentTripUri;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
@@ -51,7 +51,7 @@ public class DeleteSingleStudentTrip extends AbstractDeleteState<StudentTrip>
 
 	@Override protected void defineTransitionLinks()
 	{
-		addLink(StudentTripUri.REL_PATH, StudentTripRelTypes.GET_ALL_STUDENTTRIPS, MediaType.APPLICATION_JSON);
+		addLink(StudentTripUri.REL_PATH, StudentTripRelTypes.GET_ALL_STUDENT_TRIPS, MediaType.APPLICATION_JSON);
 	}
 
 	public static class Builder extends AbstractDeleteStateBuilder

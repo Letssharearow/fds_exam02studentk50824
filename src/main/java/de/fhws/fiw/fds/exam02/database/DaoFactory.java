@@ -17,14 +17,12 @@
 package de.fhws.fiw.fds.exam02.database;
 
 import de.fhws.fiw.fds.exam02.database.inmemory.AbstractStudentAndTripStorage;
-import de.fhws.fiw.fds.exam02.database.inmemory.StudentInMemoryStorage;
-import de.fhws.fiw.fds.exam02.database.inmemory.StudentTripInMemoryStorage;
 
 public class DaoFactory
 {
 	private static DaoFactory INSTANCE;
 
-	public static final DaoFactory getInstance()
+	public static DaoFactory getInstance()
 	{
 		if (INSTANCE == null)
 		{

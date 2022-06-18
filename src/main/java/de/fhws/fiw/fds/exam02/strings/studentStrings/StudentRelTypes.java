@@ -1,4 +1,4 @@
-package de.fhws.fiw.fds.exam02.Strings.StudentStrings;
+package de.fhws.fiw.fds.exam02.strings.studentStrings;
 
 public interface StudentRelTypes
 {
