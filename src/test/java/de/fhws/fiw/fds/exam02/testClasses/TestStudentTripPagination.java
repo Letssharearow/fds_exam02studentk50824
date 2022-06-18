@@ -25,7 +25,7 @@ public class TestStudentTripPagination
 		return client.getDispatcher();
 	}
 
-	@BeforeClass public void createData()
+	@BeforeClass public static void createData()
 	{
 		StudentTripView model = getStudentTripView();
 
@@ -54,7 +54,7 @@ public class TestStudentTripPagination
 		return new StudentTripView("Felix", 0L, start, end, "partnerUni", "city", "country", set);
 	}
 
-	@AfterClass public void removeData()
+	@AfterClass public static void removeData()
 	{
 		WebApiClientStudentTrip clientStudentTrip = new WebApiClientStudentTrip();
 
