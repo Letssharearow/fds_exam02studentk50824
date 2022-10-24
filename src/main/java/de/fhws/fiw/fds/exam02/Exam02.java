@@ -27,6 +27,11 @@ import java.util.Set;
 
 @ApplicationPath("api") public class Exam02 extends AbstractApplication
 {
+	public Exam02()
+	{
+		super();
+	}
+
 	@Override protected Set<Class<?>> getServiceClasses()
 	{
 		final Set<Class<?>> returnValue = new HashSet<>();

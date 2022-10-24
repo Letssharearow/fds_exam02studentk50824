@@ -48,4 +48,9 @@ public class DaoFactory
 	{
 		return this.abstractStudentAndTripStorage.getStudentDao();
 	}
+
+	public StudentTripStudentDao getStudentTripStudentDao()
+	{
+		return this.abstractStudentAndTripStorage.getStudentTripStudentDao();
+	}
 }

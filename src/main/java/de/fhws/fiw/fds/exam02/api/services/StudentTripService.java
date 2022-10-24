@@ -16,6 +16,7 @@
 
 package de.fhws.fiw.fds.exam02.api.services;
 
+import com.owlike.genson.annotation.JsonConverter;
 import de.fhws.fiw.fds.exam02.api.query.QueryPageParameter;
 import de.fhws.fiw.fds.exam02.api.query.QueryStudent;
 import de.fhws.fiw.fds.exam02.api.states.delete.DeleteSingleStudentTrip;
@@ -23,23 +24,29 @@ import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudentTrips;
 import de.fhws.fiw.fds.exam02.api.states.get.GetAllStudents;
 import de.fhws.fiw.fds.exam02.api.states.get.GetSingleStudent;
 import de.fhws.fiw.fds.exam02.api.states.get.GetSingleStudentTrip;
+import de.fhws.fiw.fds.exam02.api.states.post.PostNewStudent;
+import de.fhws.fiw.fds.exam02.api.states.post.PostNewStudentOfTrip;
 import de.fhws.fiw.fds.exam02.api.states.post.PostNewStudentTrip;
 import de.fhws.fiw.fds.exam02.api.states.put.PutSingleStudentTrip;
 import de.fhws.fiw.fds.exam02.database.DaoFactory;
+import de.fhws.fiw.fds.exam02.models.Student;
 import de.fhws.fiw.fds.exam02.models.StudentTrip;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
+import de.fhws.fiw.fds.sutton.utils.JsonDateTimeConverter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDate;
 
 @Path("StudentTrips") public class StudentTripService extends AbstractService
 {
 	@GET @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response getAllStudentTrips(
 		@DefaultValue("1") @QueryParam("page") final int pageNumber, @DefaultValue("") @QueryParam("name") String name,
 		@DefaultValue("") @QueryParam("city") String city, @DefaultValue("") @QueryParam("country") String country,
-		@DefaultValue("") @QueryParam("start") String start, @DefaultValue("") @QueryParam("end") String end)
+		@DefaultValue("") @QueryParam("start") String start, @DefaultValue("") @QueryParam("end") String end,
+		@DefaultValue("") @QueryParam("date") LocalDate date)
 	{
 		return new GetAllStudentTrips.Builder().setQuery(
 				new QueryPageParameter(pageNumber, name, city, country, start, end)).setUriInfo(this.uriInfo)
@@ -82,6 +89,14 @@ import javax.ws.rs.core.Response;
 		return new GetSingleStudent.Builder().setRequestedId(studentId).setUriInfo(this.uriInfo)
 			.setRequest(this.request).setHttpServletRequest(this.httpServletRequest).setContext(this.context).build()
 			.execute();
+	}
+
+	@POST @Path("{StudentTripId: \\d+}/Students") @Consumes({ MediaType.APPLICATION_JSON,
+		MediaType.APPLICATION_XML }) public Response createSingleStudent(final Student StudentModel,
+		@PathParam("StudentTripId") final long studentTripId)
+	{
+		return new PostNewStudentOfTrip.Builder().setUriInfo(this.uriInfo).setRequest(this.request)
+			.setHttpServletRequest(this.httpServletRequest).setContext(this.context).build().execute();
 	}
 
 	@POST @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML }) public Response createSingleStudentTrip(
